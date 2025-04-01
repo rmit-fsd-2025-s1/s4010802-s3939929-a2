@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 import Head from "next/head";
 
 export default function LoginPage() {
@@ -14,6 +15,8 @@ export default function LoginPage() {
     { email: "jack@gmail.com", password: "lecturer123", profession: "Lecturer" },
   ];
 
+  const router = useRouter();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -27,6 +30,11 @@ export default function LoginPage() {
 
     if (user) {
       alert(`Logged in successfully as ${user.profession}!`);
+      if (user.profession === "Tutor") {
+        router.push("/tutor");
+      } else if (user.profession === "Lecturer") {
+          router.push("/lecturer");
+        }
     } else {
       alert("Incorrect email, password, or profession.");
     }
