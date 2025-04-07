@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { getStoredUsers } from "../types/user"; // Adjust the path if needed
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -9,32 +10,23 @@ export default function LoginPage() {
     profession: "",
   });
 
-  // Predefined valid credentials
-  const validUsers = [
-    { email: "john@gmail.com", password: "tutor123", profession: "Tutor" },
-    { email: "jack@gmail.com", password: "lecturer123", profession: "Lecturer" },
-  ];
-
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Check if entered credentials match any predefined ones
-    const user = validUsers.find(
+    const users = getStoredUsers();
+
+    const user = users.find(
       (u) =>
-        u.email === formData.email &&
+        u.username === formData.email &&
         u.password === formData.password &&
         u.profession === formData.profession
     );
 
     if (user) {
       alert(`Logged in successfully as ${user.profession}!`);
-      if (user.profession === "Tutor") {
-        router.push("/tutor");
-      } else if (user.profession === "Lecturer") {
-          router.push("/lecturer");
-        }
+      router.push(user.profession === "Tutor" ? "/tutor" : "/lecturer");
     } else {
       alert("Incorrect email, password, or profession.");
     }
@@ -43,11 +35,10 @@ export default function LoginPage() {
   return (
     <>
       <Head>
-        
         <title>Login Page</title>
         <meta name="description" content="User login page" />
       </Head>
-      
+
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-lg shadow-md w-96">
           <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
@@ -58,7 +49,7 @@ export default function LoginPage() {
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
                 required
               />
             </div>
@@ -68,7 +59,7 @@ export default function LoginPage() {
                 type="password"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
                 required
               />
             </div>
@@ -77,7 +68,7 @@ export default function LoginPage() {
               <select
                 value={formData.profession}
                 onChange={(e) => setFormData({ ...formData, profession: e.target.value })}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
                 required
               >
                 <option value="" disabled>Select Profession</option>
