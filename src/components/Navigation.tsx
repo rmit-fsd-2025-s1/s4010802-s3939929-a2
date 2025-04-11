@@ -20,7 +20,7 @@ export default function Navigation() {
             </Link>
           )}
         </div>
-        {/* <div>
+        <div>
           {user ? (
             <div className="flex items-center gap-4">
               <span>Welcome, {user.username}!</span>
@@ -39,7 +39,7 @@ export default function Navigation() {
               Logn
             </Link>
           )}
-        </div> */}
+        </div>
       </div>
     </nav>
   );
