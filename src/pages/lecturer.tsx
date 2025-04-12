@@ -18,7 +18,7 @@ export default function LecturerPage() {
     const apps = getTutorApplications();
     setApplications(apps);
   }, []);
-
+  {/*validating the search term*/}
   const filteredApps = applications
     .filter((app) => {
       const matchesCourse = filteredCourse ? app.course === filteredCourse : true;
@@ -31,8 +31,9 @@ export default function LecturerPage() {
 
       return matchesCourse && matchesSearch;
     })
+    
     .sort((a, b) => {
-      if (sortBy === "course") {
+      if (sortBy === "course") { {/*checking for sorting input */}
         return a.course.localeCompare(b.course);
       } else if (sortBy === "availability") {
         return a.availability?.localeCompare(b.availability);

@@ -40,12 +40,13 @@ export default function LoginPage() {
         <meta name="description" content="User login page" />
       </Head>
       <Navigation />
-
+      {/*form submission for login page*/ }
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-lg shadow-md w-96">
           <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
+              {/*entering email*/}
               <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
               <input
                 type="email"
@@ -55,6 +56,7 @@ export default function LoginPage() {
                 required
               />
             </div>
+            {/*entering password*/}
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
               <input
@@ -65,6 +67,7 @@ export default function LoginPage() {
                 required
               />
             </div>
+            {/*selecting profession*/}
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">Profession</label>
               <select

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { saveTutorApplication } from "../types/tutorStorage";
-import Navigation from "../components/Navigation"; 
+import Navigation from "../components/Navigation";
 
 const TutorPage = () => {
   const [course, setCourse] = useState("");
@@ -16,6 +16,16 @@ const TutorPage = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Input validation rules:
+    // - Course must be selected
+    // - Availability must be selected
+    // - Previous roles, skills, and academic credentials must not be empty
+    if (!course) return alert("Please select a course.");
+    if (!availability) return alert("Please select your availability.");
+    if (!previousRoles.trim()) return alert("Please enter your previous roles.");
+    if (!skills.trim()) return alert("Please list your skills.");
+    if (!academicCredentials.trim()) return alert("Please enter your academic credentials.");
+
     const newApplication = {
       id: Date.now().toString(),
       course,
@@ -28,7 +38,7 @@ const TutorPage = () => {
     saveTutorApplication(newApplication);
 
     alert("Application Submitted!");
-    router.push("/"); 
+    router.push("/");
   };
 
   return (
@@ -38,7 +48,7 @@ const TutorPage = () => {
         <meta name="description" content="Enter Tutor credentials" />
       </Head>
       <Navigation />
-
+      {/* Form submission and taking input*/ }
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-lg shadow-md w-96">
           <h1 className="text-2xl font-bold mb-6 text-center">Tutor Application</h1>

@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 export default function Home() {
   const { user } = useAuth();
   const [hasMounted, setHasMounted] = useState(false);
-
+  {/* image slider on home page*/}
   const slides = [
     {
       image:
@@ -83,6 +83,7 @@ export default function Home() {
           </Link>
         )}
       </div>
+      {/*slider details*/}
       <div className="relative max-w-4xl mx-auto mt-8">
         <img
           src={slides[currentIndex].image}
