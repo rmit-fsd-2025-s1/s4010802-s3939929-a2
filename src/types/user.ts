@@ -10,6 +10,7 @@ const STORAGE_KEY = "registeredUsers";
 export const DEFAULT_USERS: User[] = [
   { id: "1", username: "john@gmail.com", password: "tutor123", profession: "Tutor" },
   { id: "2", username: "jack@gmail.com", password: "lecturer123", profession: "Lecturer" },
+  { id: "3", username: "dan@gmail.com", password: "lecturer123", profession: "Lecturer" },
 ];
 
 export function getStoredUsers(): User[] {

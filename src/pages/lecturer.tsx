@@ -2,6 +2,15 @@ import { useEffect, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { getTutorApplications } from "../types/tutorStorage";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+} from "recharts";
 
 export default function LecturerPage() {
   const [applications, setApplications] = useState<any[]>([]);
@@ -24,7 +33,7 @@ export default function LecturerPage() {
       const matchesCourse = filteredCourse ? app.course === filteredCourse : true;
       const matchesSearch =
         searchTerm === "" ||
-        app.course.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        app.course?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         app.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         app.availability?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         app.skills?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -64,6 +73,16 @@ export default function LecturerPage() {
   const handleLogout = () => {
     router.push("/");
   };
+
+  // Visual Data Processing
+  const chartData = applications.map(app => ({
+    name: app.name,
+    selected: selectedCandidates[app.id] ? 1 : 0,
+  }));
+
+  const mostChosen = chartData.reduce((a, b) => a.selected > b.selected ? a : b, chartData[0]);
+  const leastChosen = chartData.filter(a => a.selected > 0).reduce((a, b) => a.selected < b.selected ? a : b, mostChosen);
+  const unselected = chartData.filter(a => a.selected === 0);
 
   return (
     <>
@@ -187,6 +206,34 @@ export default function LecturerPage() {
               ))}
             </div>
           )}
+
+          {/* Visual Summary Chart */}
+          {/* I used this website as reference : https://recharts.org/en-US/examples/SimpleBarChart */}
+          <div className="mt-10 bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-4">Visual Summary of Selections</h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={chartData}>
+                <XAxis dataKey="name" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Bar dataKey="selected">
+                  {chartData.map((entry, index) => {
+                    let color = "#3182ce"; // default blue
+                    if (entry.name === mostChosen.name) color = "#38a169"; // green
+                    else if (entry.name === leastChosen.name) color = "#dd6b20"; // orange
+                    else if (entry.selected === 0) color = "#e53e3e"; // red
+                    return <Cell key={`cell-${index}`} fill={color} />;
+                  })}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+
+            <div className="mt-4 text-sm text-gray-600 space-y-1">
+              <p><span className="inline-block w-4 h-4 bg-green-500 mr-2"></span>Most Chosen</p>
+              <p><span className="inline-block w-4 h-4 bg-orange-500 mr-2"></span>Least Chosen</p>
+              <p><span className="inline-block w-4 h-4 bg-red-500 mr-2"></span>Not Selected</p>
+            </div>
+          </div>
         </div>
       </div>
     </>
