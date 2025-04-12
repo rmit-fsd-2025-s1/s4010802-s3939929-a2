@@ -5,12 +5,22 @@ export default function Navigation() {
   const { user, logout } = useAuth();
 
   return (
-    <nav className="bg-gray-800 text-white p-15">
+    <nav className="bg-gray-800 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center gap-4">
-          <Link href="/" className="text-x20 font-bold">
+          {/* Logo image next to HOME */}
+          <Link href="/">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png"
+              alt="Site Logo"
+              className="w-8 h-8"
+            />
+          </Link>
+
+          <Link href="/" className="text-2xl font-bold">
             HOME
           </Link>
+
           {user && (
             <Link
               href="/forum"
@@ -20,6 +30,9 @@ export default function Navigation() {
             </Link>
           )}
         </div>
+
+        {/* You can uncomment this block to enable login/logout buttons again */}
+        {/* 
         <div>
           {user ? (
             <div className="flex items-center gap-4">
@@ -36,10 +49,11 @@ export default function Navigation() {
               href="/login"
               className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
             >
-              Logn
+              Login
             </Link>
           )}
         </div>
+        */}  
       </div>
     </nav>
   );
