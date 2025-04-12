@@ -2,7 +2,6 @@ import Link from "next/link";
 import Head from "next/head";
 import { useAuth } from "../context/AuthContext";
 import { useState, useEffect } from "react";
-import Navigation from "../components/Navigation";
 
 export default function Home() {
   const { user } = useAuth();
@@ -45,14 +44,50 @@ export default function Home() {
         <meta name="description" content="Welcome to the home page" />
       </Head>
 
-      <Navigation />
+      {/* Custom Navigation with login on right */}
+      <nav className="bg-gray-800 text-white p-4">
+        <div className="container mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <Link href="/">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/25/25694.png"
+                alt="Home Logo"
+                className="w-8 h-8"
+              />
+            </Link>
+            <Link href="/" className="text-2xl font-bold">
+              HOME
+            </Link>
+          </div>
+          {!user && (
+            <Link
+              href="/login"
+              className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Login
+            </Link>
+          )}
+        </div>
+      </nav>
+      <div className="container mx-auto px-4 py-12 text-center">
+        <p className="text-gray-700 text-3xl font-bold mb-2">WELCOME</p>
+        <p className="text-gray-500 mb-6">
+          Helping tutors and lecturers connect and collaborate effectively.
+        </p>
 
-      {/* ✅ Slider Section */}
+        {user && (
+          <Link href={user.profession === "Tutor" ? "/tutor" : "/lecturer"}>
+            <button className="mt-6 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+              Go to your Dashboard
+            </button>
+          </Link>
+        )}
+      </div>
       <div className="relative max-w-4xl mx-auto mt-8">
         <img
           src={slides[currentIndex].image}
           alt="Slide"
-          className="rounded-lg w-full h-64 object-cover shadow"
+          className="rounded-lg w-full h-100 object-cover shadow"
         />
         <div className="absolute bottom-4 left-4 bg-black bg-opacity-60 text-white px-4 py-2 rounded">
           {slides[currentIndex].caption}
@@ -73,29 +108,7 @@ export default function Home() {
         </button>
       </div>
 
-      <div className="container mx-auto px-4 py-12 text-center">
-        <p className="text-gray-700 text-3xl font-bold mb-2">WELCOME</p>
-        <p className="text-gray-500 mb-6">
-          Helping tutors and lecturers connect and collaborate effectively.
-        </p>
-
-        {user && (
-          <Link href={user.profession === "Tutor" ? "/tutor" : "/lecturer"}>
-            <button className="mt-6 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-              Go to your Dashboard
-            </button>
-          </Link>
-        )}
-
-        {!user && (
-          <Link
-            href="/login"
-            className="inline-block mt-6 bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-          >
-            Login
-          </Link>
-        )}
-      </div>
+      
     </>
   );
 }

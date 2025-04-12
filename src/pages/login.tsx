@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { getStoredUsers } from "../types/user"; // Adjust path if needed
-import Navigation from "../components/Navigation"; // ✅ Import nav bar
+import { getStoredUsers } from "../types/user";
+import Navigation from "../components/Navigation"; 
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -39,8 +39,6 @@ export default function LoginPage() {
         <title>Login Page</title>
         <meta name="description" content="User login page" />
       </Head>
-
-      {/* ✅ Include Navigation bar at the top */}
       <Navigation />
 
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
