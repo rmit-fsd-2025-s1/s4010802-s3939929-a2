@@ -6,7 +6,9 @@ import React from "react";
 
 
 export default function Home() {
+  //authContext to get user info
   const { user } = useAuth();
+  //Checks if component has mounted
   const [hasMounted, setHasMounted] = useState(false);
   {/* image slider on home page*/}
   const slides = [
@@ -26,9 +28,9 @@ export default function Home() {
       caption: "Examine as a lecturer",
     },
   ];
-
+//track current index
   const [currentIndex, setCurrentIndex] = useState(0);
-
+//COmponent mount and image slider
   useEffect(() => {
     setHasMounted(true);
     const interval = setInterval(() => {

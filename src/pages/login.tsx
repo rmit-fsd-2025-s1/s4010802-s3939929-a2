@@ -4,15 +4,17 @@ import Head from "next/head";
 import { getStoredUsers } from "../types/user";
 import Navigation from "../components/Navigation";
 
+
 export default function LoginPage() {
+  //state to store user input
   const [formData, setFormData] = useState({
     username: "",  
     password: "",
     profession: "",
   });
-
+//Navigation tool
   const router = useRouter();
-
+//handle form submission.
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 

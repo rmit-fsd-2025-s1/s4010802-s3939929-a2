@@ -7,6 +7,7 @@ import Navigation from "../components/Navigation";
 
 
 const TutorPage = () => {
+  //state for each form field
   const [name, setName] = useState("");
   const [course, setCourse] = useState("");
   const [previousRoles, setPreviousRoles] = useState("");
@@ -15,17 +16,17 @@ const TutorPage = () => {
   const [academicCredentials, setAcademicCredentials] = useState("");
 
   const router = useRouter();
-
+//handle submission and save app
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+//Validation, using trim to manage text input and checks if dropdowns aren't selected 
     if (!name.trim()) return alert("Please enter your name.");
     if (!course) return alert("Please select a course.");
     if (!availability) return alert("Please select your availability.");
     if (!previousRoles.trim()) return alert("Please enter your previous roles.");
     if (!skills.trim()) return alert("Please list your skills.");
     if (!academicCredentials.trim()) return alert("Please enter your academic credentials.");
-
+//prepare app object
     const newApplication = {
       id: Date.now().toString(),
       name,
@@ -35,7 +36,7 @@ const TutorPage = () => {
       skills,
       academicCredentials,
     };
-
+//Save and redirect
     saveTutorApplication(newApplication);
     alert("Application Submitted!");
     router.push("/");

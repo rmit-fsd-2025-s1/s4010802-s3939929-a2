@@ -1,7 +1,10 @@
+//import React and next.js hooks and component
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+//import functions for getting and setting tutor applications an
 import { getTutorApplications } from "../types/tutorStorage";
+//import Rechart components for bar chart visual
 import {
   BarChart,
   Bar,
@@ -16,6 +19,7 @@ import {
   saveSelectedCandidates,
 } from "../types/selectionStorage";
 
+//Lecterer page components
 export default function LecturerPage() {
   const [applications, setApplications] = useState<any[]>([]);
   const [filteredCourse, setFilteredCourse] = useState<string>("");
@@ -26,7 +30,7 @@ export default function LecturerPage() {
   const [sortBy, setSortBy] = useState("");
 
   const router = useRouter();
-
+//retrieves prevous applications and selected candidates
   useEffect(() => {
     const apps = getTutorApplications();
     setApplications(apps);
@@ -34,39 +38,46 @@ export default function LecturerPage() {
     const savedSelections = getSelectedCandidates();
     setSelectedCandidates(savedSelections);
   }, []);
+//FIlter and sort 
+// Filter applications based on course and search term
+const afterFilter = applications.filter((app) => {
+  const matchesCourse = filteredCourse === "" || app.course === filteredCourse;
 
-  const filteredApps = applications
-    .filter((app) => {
-      const matchesCourse = filteredCourse ? app.course === filteredCourse : true;
-      const matchesSearch =
-        searchTerm === "" ||
-        app.course?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        app.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        app.availability?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        app.skills?.toLowerCase().includes(searchTerm.toLowerCase());
-      return matchesCourse && matchesSearch;
-    })
-    .sort((a, b) => {
-      if (sortBy === "course") return a.course.localeCompare(b.course);
-      if (sortBy === "availability") return a.availability?.localeCompare(b.availability);
-      return 0;
-    });
+  const search = searchTerm.toLowerCase();
+  const matchesSearch =
+    searchTerm === "" ||
+    (app.course && app.course.toLowerCase().includes(search)) ||
+    (app.name && app.name.toLowerCase().includes(search)) ||
+    (app.availability && app.availability.toLowerCase().includes(search)) ||
+    (app.skills && app.skills.toLowerCase().includes(search));
 
+  return matchesCourse && matchesSearch;
+});
+
+//Sort the filtered results
+const filteredApps = afterFilter.sort((a, b) => {
+  if (sortBy === "course") return a.course.localeCompare(b.course);
+  if (sortBy === "availability") return a.availability?.localeCompare(b.availability);
+  return 0;
+});
+  
+  //Incremenets when selection count
   const selectCandidate = (id: string) => {
     const newCount = (selectedCandidates[id] || 0) + 1;
     const updated = { ...selectedCandidates, [id]: newCount };
     setSelectedCandidates(updated);
     saveSelectedCandidates(updated);
   };
-
+  //Updates rank input for candidates
   const updateRanking = (id: string, rank: number) => {
     setRankings((prev) => ({ ...prev, [id]: rank }));
   };
 
+//Update comments for candidates
   const updateComment = (id: string, comment: string) => {
     setComments((prev) => ({ ...prev, [id]: comment }));
   };
-
+//navigates to homepage
   const handleLogout = () => {
     router.push("/");
   };
@@ -79,12 +90,14 @@ export default function LecturerPage() {
     };
   });
 
+  //Visual bar chart, used https://recharts.org/en-US/examples/SimpleBarChart and 
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter for reference
   const nonZero = chartData.filter(a => a.selected > 0);
 
   // Most chosen
   const mostChosen = nonZero.reduce((a, b) => (a.selected >= b.selected ? a : b), nonZero[0]);
   
-  // Least chosen (not including most)
+  // Least chosen
   const notMost = nonZero.filter(a => a.selected !== mostChosen.selected);
   const leastChosen =
     notMost.length > 0
@@ -202,14 +215,14 @@ export default function LecturerPage() {
                 <Tooltip />
                 <Bar dataKey="selected" minPointSize={30}>
                 {chartData.map((entry, index) => {
-                  let color = "#3182ce"; // default blue (middle ground)
+                  let color = "#3182ce"; // default blue
 
                   if (entry.selected === 0) {
-                    color = "#e53e3e"; // red (not selected)
+                    color = "#e53e3e"; // red
                   } else if (entry.selected === mostChosen.selected) {
-                    color = "#38a169"; // green (most chosen)
+                    color = "#38a169"; // green
                   } else if (leastChosen && entry.selected === leastChosen.selected) {
-                    color = "#dd6b20"; // orange (least chosen)
+                    color = "#dd6b20"; // orange
                   }
 
                   return <Cell key={`cell-${index}`} fill={color} />;
