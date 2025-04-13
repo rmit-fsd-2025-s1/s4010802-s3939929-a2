@@ -53,7 +53,7 @@ export default function LecturerPage() {
     });
 
   const selectCandidate = (id: string) => {
-    const newCount = (selectedCandidates[id] || 1) + 1;
+    const newCount = (selectedCandidates[id] || 0) + 1;
     const updated = { ...selectedCandidates, [id]: newCount };
     setSelectedCandidates(updated);
     saveSelectedCandidates(updated);
@@ -200,7 +200,7 @@ export default function LecturerPage() {
                 <XAxis dataKey="name" />
                 <YAxis allowDecimals={false} domain={[0, 1]} />
                 <Tooltip />
-                <Bar dataKey="selected" minPointSize={10}>
+                <Bar dataKey="selected" minPointSize={30}>
                 {chartData.map((entry, index) => {
                   let color = "#3182ce"; // default blue (middle ground)
 
