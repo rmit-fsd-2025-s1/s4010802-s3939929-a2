@@ -1,3 +1,12 @@
+Hi there!
+This is the work for Nihar Mehta and Joshua Kumar.
+Did all the parts till DI but the HD is left wrote the unit tests but were not able to implement it to the fullest. 
+The login details for tutor and lecturer are stored in the local Storage of HTML. 
+For Tutor, 
+UserName - john@gmail.com     Password - tutor123    Profession - Tutor
+For Lecturer, 
+UserName - jack@gmail.com     Password - lecturer123   Profession - lecturer
+UserName - dan@gmail.com      Password - lecturer123   Profession - lecturer
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
 
 ## Getting Started
