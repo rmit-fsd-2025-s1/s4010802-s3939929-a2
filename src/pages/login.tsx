@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { getStoredUsers } from "../types/user";
-import Navigation from "../components/Navigation"; 
+import Navigation from "../components/Navigation";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",  
     password: "",
     profession: "",
   });
@@ -20,7 +20,7 @@ export default function LoginPage() {
 
     const user = users.find(
       (u) =>
-        u.username === formData.email &&
+        u.username === formData.username &&
         u.password === formData.password &&
         u.profession === formData.profession
     );
@@ -29,7 +29,7 @@ export default function LoginPage() {
       alert(`Logged in successfully as ${user.profession}!`);
       router.push(user.profession === "Tutor" ? "/tutor" : "/lecturer");
     } else {
-      alert("Incorrect email, password, or profession.");
+      alert("Incorrect username, password, or profession.");
     }
   };
 
@@ -40,23 +40,22 @@ export default function LoginPage() {
         <meta name="description" content="User login page" />
       </Head>
       <Navigation />
-      {/*form submission for login page*/ }
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-lg shadow-md w-96">
           <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              {/*entering email*/}
-              <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
+              <label className="block text-gray-700 text-sm font-bold mb-2">Username (Email)</label>
               <input
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                type="text"
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+                placeholder="Enter your email"
                 required
               />
             </div>
-            {/*entering password*/}
+
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
               <input
@@ -67,7 +66,7 @@ export default function LoginPage() {
                 required
               />
             </div>
-            {/*selecting profession*/}
+
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">Profession</label>
               <select
@@ -81,6 +80,7 @@ export default function LoginPage() {
                 <option value="Lecturer">Lecturer</option>
               </select>
             </div>
+
             <button
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"

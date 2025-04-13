@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { getTutorApplications } from "../types/tutorStorage";
@@ -11,11 +11,15 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
+import {
+  getSelectedCandidates,
+  saveSelectedCandidates,
+} from "../types/selectionStorage";
 
 export default function LecturerPage() {
   const [applications, setApplications] = useState<any[]>([]);
   const [filteredCourse, setFilteredCourse] = useState<string>("");
-  const [selectedCandidates, setSelectedCandidates] = useState<{ [key: string]: boolean }>({});
+  const [selectedCandidates, setSelectedCandidates] = useState<{ [key: string]: number }>({});
   const [rankings, setRankings] = useState<{ [key: string]: number }>({});
   const [comments, setComments] = useState<{ [key: string]: string }>({});
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,8 +30,11 @@ export default function LecturerPage() {
   useEffect(() => {
     const apps = getTutorApplications();
     setApplications(apps);
+
+    const savedSelections = getSelectedCandidates();
+    setSelectedCandidates(savedSelections);
   }, []);
-  {/*validating the search term*/}
+
   const filteredApps = applications
     .filter((app) => {
       const matchesCourse = filteredCourse ? app.course === filteredCourse : true;
@@ -37,53 +44,43 @@ export default function LecturerPage() {
         app.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         app.availability?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         app.skills?.toLowerCase().includes(searchTerm.toLowerCase());
-
       return matchesCourse && matchesSearch;
     })
-    
     .sort((a, b) => {
-      if (sortBy === "course") { {/*checking for sorting input */}
-        return a.course.localeCompare(b.course);
-      } else if (sortBy === "availability") {
-        return a.availability?.localeCompare(b.availability);
-      }
+      if (sortBy === "course") return a.course.localeCompare(b.course);
+      if (sortBy === "availability") return a.availability?.localeCompare(b.availability);
       return 0;
     });
 
-  const toggleCandidateSelection = (id: string) => {
-    setSelectedCandidates((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+  const selectCandidate = (id: string) => {
+    const newCount = (selectedCandidates[id] || 1) + 1;
+    const updated = { ...selectedCandidates, [id]: newCount };
+    setSelectedCandidates(updated);
+    saveSelectedCandidates(updated);
   };
 
   const updateRanking = (id: string, rank: number) => {
-    setRankings((prev) => ({
-      ...prev,
-      [id]: rank,
-    }));
+    setRankings((prev) => ({ ...prev, [id]: rank }));
   };
 
   const updateComment = (id: string, comment: string) => {
-    setComments((prev) => ({
-      ...prev,
-      [id]: comment,
-    }));
+    setComments((prev) => ({ ...prev, [id]: comment }));
   };
 
   const handleLogout = () => {
     router.push("/");
   };
 
-  // Visual Data Processing
-  const chartData = applications.map(app => ({
-    name: app.name,
-    selected: selectedCandidates[app.id] ? 1 : 0,
-  }));
+  const chartData = applications.map(app => {
+    const count = selectedCandidates[app.id] ?? 1; // Default count of 1 (Not Selected)
+    return {
+      name: app.name,
+      selected: count
+    };
+  });
 
   const mostChosen = chartData.reduce((a, b) => a.selected > b.selected ? a : b, chartData[0]);
-  const leastChosen = chartData.filter(a => a.selected > 0).reduce((a, b) => a.selected < b.selected ? a : b, mostChosen);
-  const unselected = chartData.filter(a => a.selected === 0);
+  const leastChosen = chartData.filter(a => a.selected > 1).reduce((a, b) => a.selected < b.selected ? a : b, mostChosen);
 
   return (
     <>
@@ -104,11 +101,8 @@ export default function LecturerPage() {
             </button>
           </div>
 
-          {/* Course Filter */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Filter by Course:
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Course:</label>
             <select
               value={filteredCourse}
               onChange={(e) => setFilteredCourse(e.target.value)}
@@ -121,11 +115,8 @@ export default function LecturerPage() {
             </select>
           </div>
 
-          {/* Search Input */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Search (Name, Availability, Skills):
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Search (Name, Availability, Skills):</label>
             <input
               type="text"
               value={searchTerm}
@@ -135,11 +126,8 @@ export default function LecturerPage() {
             />
           </div>
 
-          {/* Sort Options */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Sort by:
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Sort by:</label>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
@@ -151,7 +139,6 @@ export default function LecturerPage() {
             </select>
           </div>
 
-          {/* Application List */}
           {filteredApps.length === 0 ? (
             <p className="text-center text-gray-600">No applications found.</p>
           ) : (
@@ -165,51 +152,38 @@ export default function LecturerPage() {
                   <p><strong>Academic Credentials:</strong> {app.academicCredentials}</p>
 
                   <div className="mt-4">
-                    <label className="inline-flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={!!selectedCandidates[app.id]}
-                        onChange={() => toggleCandidateSelection(app.id)}
-                        className="form-checkbox h-4 w-4 text-blue-600"
-                      />
-                      <span className="ml-2">Select Candidate</span>
-                    </label>
+                    <button
+                      onClick={() => selectCandidate(app.id)}
+                      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                    >
+                      Select Candidate
+                    </button>
                   </div>
 
-                  {selectedCandidates[app.id] && (
-                    <>
-                      <div className="mt-2">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Rank (1 = highest preference):
-                        </label>
-                        <input
-                          type="number"
-                          min={1}
-                          value={rankings[app.id] || ""}
-                          onChange={(e) => updateRanking(app.id, Number(e.target.value))}
-                          className="w-full mt-1 p-2 border border-gray-300 rounded"
-                        />
-                      </div>
-                      <div className="mt-2">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Comments:
-                        </label>
-                        <textarea
-                          value={comments[app.id] || ""}
-                          onChange={(e) => updateComment(app.id, e.target.value)}
-                          className="w-full mt-1 p-2 border border-gray-300 rounded"
-                          placeholder="Enter comments for this candidate"
-                        />
-                      </div>
-                    </>
-                  )}
+                  <div className="mt-2">
+                    <label className="block text-sm font-medium text-gray-700">Rank (1 = highest preference):</label>
+                    <input
+                      type="number"
+                      min={1}
+                      value={rankings[app.id] || ""}
+                      onChange={(e) => updateRanking(app.id, Number(e.target.value))}
+                      className="w-full mt-1 p-2 border border-gray-300 rounded"
+                    />
+                  </div>
+                  <div className="mt-2">
+                    <label className="block text-sm font-medium text-gray-700">Comments:</label>
+                    <textarea
+                      value={comments[app.id] || ""}
+                      onChange={(e) => updateComment(app.id, e.target.value)}
+                      className="w-full mt-1 p-2 border border-gray-300 rounded"
+                      placeholder="Enter comments for this candidate"
+                    />
+                  </div>
                 </div>
               ))}
             </div>
           )}
 
-          {/* Visual Summary Chart */}
-          {/* I used this website as reference : https://recharts.org/en-US/examples/SimpleBarChart */}
           <div className="mt-10 bg-white shadow-md rounded-lg p-6">
             <h2 className="text-xl font-semibold mb-4">Visual Summary of Selections</h2>
             <ResponsiveContainer width="100%" height={300}>
@@ -219,13 +193,20 @@ export default function LecturerPage() {
                 <Tooltip />
                 <Bar dataKey="selected">
                   {chartData.map((entry, index) => {
-                    let color = "#3182ce"; // default blue
-                    if (entry.name === mostChosen.name) color = "#38a169"; // green
-                    else if (entry.name === leastChosen.name) color = "#dd6b20"; // orange
-                    else if (entry.selected === 0) color = "#e53e3e"; // red
+                    let color = "#e53e3e"; // Default red for "Not Selected"
+
+                    if (entry.selected > 1) {
+                      if (entry.name === mostChosen.name) {
+                        color = "#38a169"; // Green
+                      } else {
+                        color = "#dd6b20"; // Orange
+                      }
+                    }
+
                     return <Cell key={`cell-${index}`} fill={color} />;
                   })}
                 </Bar>
+
               </BarChart>
             </ResponsiveContainer>
 

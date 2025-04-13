@@ -1,6 +1,7 @@
 const STORAGE_KEY = "tutorApplications";
 const DEFAULT_APPLICATIONS: any[] = [];
 
+// Save a new tutor application to local storage
 export function saveTutorApplication(application: any) {
   if (typeof window === "undefined") return;
 
@@ -9,6 +10,7 @@ export function saveTutorApplication(application: any) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
 }
 
+// Retrieve all saved tutor applications
 export function getTutorApplications(): any[] {
   if (typeof window === "undefined") return [];
   const stored = localStorage.getItem(STORAGE_KEY);
