@@ -72,15 +72,24 @@ export default function LecturerPage() {
   };
 
   const chartData = applications.map(app => {
-    const count = selectedCandidates[app.id] ?? 1; // Default count of 1 (Not Selected)
+    const count = selectedCandidates[app.id] ?? 0;
     return {
       name: app.name,
       selected: count
     };
   });
 
-  const mostChosen = chartData.reduce((a, b) => a.selected > b.selected ? a : b, chartData[0]);
-  const leastChosen = chartData.filter(a => a.selected > 1).reduce((a, b) => a.selected < b.selected ? a : b, mostChosen);
+  const nonZero = chartData.filter(a => a.selected > 0);
+
+  // Most chosen
+  const mostChosen = nonZero.reduce((a, b) => (a.selected >= b.selected ? a : b), nonZero[0]);
+  
+  // Least chosen (not including most)
+  const notMost = nonZero.filter(a => a.selected !== mostChosen.selected);
+  const leastChosen =
+    notMost.length > 0
+      ? notMost.reduce((a, b) => (a.selected <= b.selected ? a : b), notMost[0])
+      : null;
 
   return (
     <>
@@ -189,22 +198,22 @@ export default function LecturerPage() {
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartData}>
                 <XAxis dataKey="name" />
-                <YAxis allowDecimals={false} />
+                <YAxis allowDecimals={false} domain={[0, 1]} />
                 <Tooltip />
-                <Bar dataKey="selected">
-                  {chartData.map((entry, index) => {
-                    let color = "#e53e3e"; // Default red for "Not Selected"
+                <Bar dataKey="selected" minPointSize={10}>
+                {chartData.map((entry, index) => {
+                  let color = "#3182ce"; // default blue (middle ground)
 
-                    if (entry.selected > 1) {
-                      if (entry.name === mostChosen.name) {
-                        color = "#38a169"; // Green
-                      } else {
-                        color = "#dd6b20"; // Orange
-                      }
-                    }
+                  if (entry.selected === 0) {
+                    color = "#e53e3e"; // red (not selected)
+                  } else if (entry.selected === mostChosen.selected) {
+                    color = "#38a169"; // green (most chosen)
+                  } else if (leastChosen && entry.selected === leastChosen.selected) {
+                    color = "#dd6b20"; // orange (least chosen)
+                  }
 
-                    return <Cell key={`cell-${index}`} fill={color} />;
-                  })}
+                  return <Cell key={`cell-${index}`} fill={color} />;
+                })}
                 </Bar>
 
               </BarChart>
@@ -213,6 +222,7 @@ export default function LecturerPage() {
             <div className="mt-4 text-sm text-gray-600 space-y-1">
               <p><span className="inline-block w-4 h-4 bg-green-500 mr-2"></span>Most Chosen</p>
               <p><span className="inline-block w-4 h-4 bg-orange-500 mr-2"></span>Least Chosen</p>
+              <p><span className="inline-block w-4 h-4 bg-blue-500 mr-2"></span>Middle Selection</p>
               <p><span className="inline-block w-4 h-4 bg-red-500 mr-2"></span>Not Selected</p>
             </div>
           </div>
