@@ -2,20 +2,15 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import LoginPage from "../src/pages/login";
 import * as userModule from "../src/types/user";
 import { useRouter } from "next/router";
-
-// Mock the router
 jest.mock("next/router", () => ({
   useRouter: jest.fn(),
 }));
-
-// Mock getStoredUsers
 jest.mock("../types/user", () => ({
   getStoredUsers: jest.fn(),
 }));
 
 describe("Login Page", () => {
   beforeEach(() => {
-    // Fix: Explicitly cast as jest.Mock
     const mockedGetUsers = userModule.getStoredUsers as jest.Mock;
     (userModule.getStoredUsers as jest.Mock).mockReturnValue([
       {
@@ -43,8 +38,6 @@ describe("Login Page", () => {
     fireEvent.change(screen.getByLabelText("Profession"), {
       target: { value: "Tutor" },
     });
-
-    // Mock alert
     window.alert = jest.fn();
 
     fireEvent.click(screen.getByText("Login"));
