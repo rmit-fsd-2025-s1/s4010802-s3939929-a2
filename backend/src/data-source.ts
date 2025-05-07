@@ -6,7 +6,7 @@ import { Course } from "./entity/Course";
 
 export const AppDataSource = new DataSource({
   type: "mysql",
-  host: "localhost",
+  host: "209.38.26.237",
   port: 3306,
   username: "S4010802",
   password: "S4010802",

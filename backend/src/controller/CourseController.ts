@@ -5,9 +5,7 @@ import { Course } from "../entity/Course";
 export class CourseController {
   private courseRepository = AppDataSource.getRepository(Course);
 
-  /**
-   * Retrieves all courses from the database
-   */
+ 
   async all(req: Request, res: Response) {
     try {
       const courses = await this.courseRepository.find({
@@ -20,9 +18,7 @@ export class CourseController {
     }
   }
 
-  /**
-   * Retrieves a single course by ID
-   */
+  
   async one(req: Request, res: Response) {
     try {
       const id = parseInt(req.params.id);
@@ -42,14 +38,12 @@ export class CourseController {
     }
   }
 
-  /**
-   * Creates a new course
-   */
+  
   async save(req: Request, res: Response) {
     try {
       const { courseName, description } = req.body;
 
-      // Check if the course name already exists
+      
       const existingCourse = await this.courseRepository.findOne({
         where: { courseName },
       });
@@ -71,9 +65,7 @@ export class CourseController {
     }
   }
 
-  /**
-   * Updates an existing course
-   */
+  
   async update(req: Request, res: Response) {
     try {
       const id = parseInt(req.params.id);
@@ -98,9 +90,7 @@ export class CourseController {
     }
   }
 
-  /**
-   * Deletes a course from the database by its ID
-   */
+  
   async remove(req: Request, res: Response) {
     try {
       const id = parseInt(req.params.id);
@@ -120,9 +110,7 @@ export class CourseController {
     }
   }
 
-  /**
-   * Deletes all courses from the database
-   */
+ 
   async removeAll(req: Request, res: Response) {
     try {
       await this.courseRepository.clear();

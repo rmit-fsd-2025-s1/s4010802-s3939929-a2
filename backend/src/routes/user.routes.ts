@@ -16,6 +16,10 @@ router.post("/users", async (req, res) => {
   await userController.save(req, res);
 });
 
+router.post("/users/login", async (req, res) => {
+  await userController.login(req, res);
+});
+
 router.put("/users/:id", async (req, res) => {
   await userController.update(req, res);
 });

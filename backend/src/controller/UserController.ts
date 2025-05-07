@@ -74,4 +74,31 @@ export class UserController {
       return response.status(500).json({ message: "Error removing all users", error });
     }
   }
+  async login(request: Request, response: Response) {
+    const { username, password, profession } = request.body;
+
+    if (!username || !password || !profession) {
+      return response.status(400).json({ message: "Missing username, password, or profession" });
+    }
+
+    try {
+      const user = await this.userRepository.findOneBy({ username, profession });
+
+      if (!user || user.password !== password) {
+        return response.status(401).json({ message: "Invalid credentials" });
+      }
+
+      return response.json({
+        message: "Login successful",
+        user: {
+          id: user.id,
+          username: user.username,
+          profession: user.profession,
+        },
+      });
+    } catch (error) {
+      return response.status(500).json({ message: "Error during login", error });
+    }
+  }
+
 }

@@ -1,37 +1,26 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { getStoredUsers } from "../types/user";
 import Navigation from "../components/Navigation";
-
+import { loginUser } from "../services/userServices";
 
 export default function LoginPage() {
-  //state to store user input
   const [formData, setFormData] = useState({
-    username: "",  
+    username: "",
     password: "",
     profession: "",
   });
-//Navigation tool
+
   const router = useRouter();
-//handle form submission.
-  const handleSubmit = (e: React.FormEvent) => {
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const users = getStoredUsers();
-
-    const user = users.find(
-      (u) =>
-        u.username === formData.username &&
-        u.password === formData.password &&
-        u.profession === formData.profession
-    );
+    const user = await loginUser(formData.username, formData.password, formData.profession);
 
     if (user) {
       alert(`Logged in successfully as ${user.profession}!`);
       router.push(user.profession === "Tutor" ? "/tutor" : "/lecturer");
-    } else {
-      alert("Incorrect username, password, or profession.");
     }
   };
 
