@@ -20,6 +20,11 @@ router.post("/users/login", async (req, res) => {
   await userController.login(req, res);
 });
 
+router.post("/users/signup", async (req, res) => {
+    await userController.signup(req, res);
+  });
+  
+
 router.put("/users/:id", async (req, res) => {
   await userController.update(req, res);
 });

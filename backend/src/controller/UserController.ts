@@ -101,4 +101,35 @@ export class UserController {
     }
   }
 
+  async signup(request: Request, response: Response) {
+    const { username, password, profession } = request.body;
+
+    if (!username || !password || !profession) {
+      return response.status(400).json({ message: "Missing username, password, or profession" });
+    }
+
+    try {
+      // Check if the user already exists
+      const existingUser = await this.userRepository.findOneBy({ username });
+      if (existingUser) {
+        return response.status(409).json({ message: "User already exists" });
+      }
+
+      // Create and save the new user
+      const user = this.userRepository.create({ username, password, profession });
+      const savedUser = await this.userRepository.save(user);
+
+      return response.status(201).json({
+        message: "User registered successfully",
+        user: {
+          id: savedUser.id,
+          username: savedUser.username,
+          profession: savedUser.profession,
+        },
+      });
+    } catch (error) {
+      return response.status(500).json({ message: "Error during registration", error });
+    }
+  }
+
 }
