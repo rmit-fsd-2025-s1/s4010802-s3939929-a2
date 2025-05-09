@@ -1,3 +1,5 @@
+// src/pages/login.tsx
+
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -10,7 +12,7 @@ export default function AuthPage() {
     password: "",
     profession: "",
   });
-  const [isLogin, setIsLogin] = useState(true); // Toggle between login and signup
+  const [isLogin, setIsLogin] = useState(true);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,7 +23,9 @@ export default function AuthPage() {
       const user = await loginUser(formData.username, formData.password, formData.profession);
       if (user) {
         alert(`Logged in successfully as ${user.profession}!`);
-        router.push(user.profession === "Tutor" ? "/tutor" : "/lecturer");
+
+        // Redirect to Home Page with username and profession as query parameters
+        router.push(`/?username=${user.username}&profession=${user.profession}`);
       }
     } else {
       // Signup Logic

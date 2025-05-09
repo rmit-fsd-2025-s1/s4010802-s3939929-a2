@@ -1,45 +1,55 @@
+// src/pages/index.tsx
+
 import Link from "next/link";
 import Head from "next/head";
-import { useAuth } from "../context/AuthContext";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import React from "react";
 
-
 export default function Home() {
-  //authContext to get user info
-  const { user } = useAuth();
-  //Checks if component has mounted
-  const [hasMounted, setHasMounted] = useState(false);
-  {/* image slider on home page*/}
+  const router = useRouter();
+  const [username, setUsername] = useState("");
+  const [profession, setProfession] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Image slider data
   const slides = [
     {
-      image:
-        "https://images.unsplash.com/photo-1549923746-c502d488b3ea?w=600&auto=format&fit=crop&q=60",
+      image: "https://images.unsplash.com/photo-1549923746-c502d488b3ea?w=600&auto=format&fit=crop&q=60",
       caption: "Quick Tutor-Lecturer Interaction",
     },
     {
-      image:
-        "https://plus.unsplash.com/premium_photo-1663126346116-f0ccaf232268?w=600&auto=format&fit=crop&q=60",
+      image: "https://plus.unsplash.com/premium_photo-1663126346116-f0ccaf232268?w=600&auto=format&fit=crop&q=60",
       caption: "Apply as a tutor in seconds",
     },
     {
-      image:
-        "https://media.istockphoto.com/id/1495320643/photo/smiling-female-teacher-working-on-laptop-in-the-classroom.webp?a=1&b=1&s=612x612&w=0&k=20&c=RWzlfCNTaN7f6fcl4eSTDu_Iw3UPGBEx82qIX9TE9iI=",
+      image: "https://media.istockphoto.com/id/1495320643/photo/smiling-female-teacher-working-on-laptop-in-the-classroom.webp?a=1&b=1&s=612x612&w=0&k=20&c=RWzlfCNTaN7f6fcl4eSTDu_Iw3UPGBEx82qIX9TE9iI=",
       caption: "Examine as a lecturer",
     },
   ];
-//track current index
-  const [currentIndex, setCurrentIndex] = useState(0);
-//COmponent mount and image slider
+
   useEffect(() => {
-    setHasMounted(true);
+    const { username, profession } = router.query;
+    if (username && profession) {
+      setUsername(username as string);
+      setProfession(profession as string);
+      setIsLoggedIn(true);
+    }
+
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % slides.length);
     }, 4000);
-    return () => clearInterval(interval);
-  }, []);
 
-  if (!hasMounted) return null;
+    return () => clearInterval(interval);
+  }, [router.query]);
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUsername("");
+    setProfession("");
+    router.push("/login");
+  };
 
   return (
     <>
@@ -63,31 +73,61 @@ export default function Home() {
               HOME
             </Link>
           </div>
-          {!user && (
+
+          {!isLoggedIn ? (
             <Link
               href="/login"
               className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
             >
               Login
             </Link>
+          ) : (
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 px-4 py-2 rounded hover:bg-red-600"
+            >
+              Logout
+            </button>
           )}
         </div>
       </nav>
-      <div className="container mx-auto px-4 py-12 text-center">
-        <p className="text-gray-700 text-3xl font-bold mb-2">WELCOME</p>
-        <p className="text-gray-500 mb-6">
-          Helping tutors and lecturers connect and collaborate effectively.
-        </p>
 
-        {user && (
-          <Link href={user.profession === "Tutor" ? "/tutor" : "/lecturer"}>
-            <button className="mt-6 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-              Go to your Dashboard
-            </button>
-          </Link>
+      {/* Welcome message if logged in */}
+      <div className="container mx-auto px-4 py-12 text-center">
+        {isLoggedIn ? (
+          <>
+            <p className="text-gray-700 text-3xl font-bold mb-2">WELCOME {username}</p>
+            <p className="text-gray-500 mb-6">
+              Ready to take the next step in your teaching journey?
+            </p>
+
+            {profession === "Tutor" && (
+              <Link href="/tutor">
+                <button className="mt-6 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                  Apply for Tutor Roles
+                </button>
+              </Link>
+            )}
+
+            {profession === "Lecturer" && (
+              <Link href="/lecturer">
+                <button className="mt-6 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                  Apply for Lecturer Roles
+                </button>
+              </Link>
+            )}
+          </>
+        ) : (
+          <>
+            <p className="text-gray-700 text-3xl font-bold mb-2">WELCOME</p>
+            <p className="text-gray-500 mb-6">
+              Helping tutors and lecturers connect and collaborate effectively.
+            </p>
+          </>
         )}
       </div>
-      {/*slider details*/}
+
+      {/* Image slider */}
       <div className="relative max-w-4xl mx-auto mt-8">
         <img
           src={slides[currentIndex].image}
@@ -112,8 +152,6 @@ export default function Home() {
           ❯
         </button>
       </div>
-
-      
     </>
   );
 }
