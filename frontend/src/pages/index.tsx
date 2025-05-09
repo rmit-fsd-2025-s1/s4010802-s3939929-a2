@@ -1,4 +1,4 @@
-// src/pages/index.tsx
+
 
 import Link from "next/link";
 import Head from "next/head";
@@ -13,7 +13,7 @@ export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Image slider data
+  
   const slides = [
     {
       image: "https://images.unsplash.com/photo-1549923746-c502d488b3ea?w=600&auto=format&fit=crop&q=60",
@@ -58,41 +58,50 @@ export default function Home() {
         <meta name="description" content="Welcome to the home page" />
       </Head>
 
-      {/* Custom Navigation with login on right */}
+      
       <nav className="bg-gray-800 text-white p-4">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <Link href="/">
+            <Link href={`/?username=${username}&profession=${profession}`}>
               <img
                 src="https://cdn-icons-png.flaticon.com/512/25/25694.png"
                 alt="Home Logo"
                 className="w-8 h-8"
               />
             </Link>
-            <Link href="/" className="text-2xl font-bold">
+            <Link href={`/?username=${username}&profession=${profession}`} className="text-2xl font-bold">
               HOME
             </Link>
           </div>
 
-          {!isLoggedIn ? (
+          {isLoggedIn ? (
+            <div className="flex items-center gap-4">
+              <Link
+                href={`/profile?username=${username}`}
+                className="bg-gray-600 px-4 py-2 rounded hover:bg-gray-700"
+              >
+                View Profile
+              </Link>
+
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 px-4 py-2 rounded hover:bg-red-600"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
             <Link
               href="/login"
               className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
             >
               Login
             </Link>
-          ) : (
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 px-4 py-2 rounded hover:bg-red-600"
-            >
-              Logout
-            </button>
           )}
         </div>
       </nav>
 
-      {/* Welcome message if logged in */}
+      
       <div className="container mx-auto px-4 py-12 text-center">
         {isLoggedIn ? (
           <>
@@ -102,7 +111,7 @@ export default function Home() {
             </p>
 
             {profession === "Tutor" && (
-              <Link href="/tutor">
+              <Link href={`/tutor?username=${username}&profession=${profession}`}>
                 <button className="mt-6 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
                   Apply for Tutor Roles
                 </button>
@@ -110,7 +119,7 @@ export default function Home() {
             )}
 
             {profession === "Lecturer" && (
-              <Link href="/lecturer">
+              <Link href={`/lecturer?username=${username}&profession=${profession}`}>
                 <button className="mt-6 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                   Apply for Lecturer Roles
                 </button>
@@ -127,7 +136,7 @@ export default function Home() {
         )}
       </div>
 
-      {/* Image slider */}
+      
       <div className="relative max-w-4xl mx-auto mt-8">
         <img
           src={slides[currentIndex].image}

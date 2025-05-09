@@ -1,17 +1,36 @@
 import Link from "next/link";
-import { useAuth } from "../context/AuthContext";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import React from "react";
 
-
 export default function Navigation() {
-  const { user, logout } = useAuth();
+  const router = useRouter();
+  const [username, setUsername] = useState("");
+  const [profession, setProfession] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const { username, profession } = router.query;
+    if (username && profession) {
+      setUsername(username as string);
+      setProfession(profession as string);
+      setIsLoggedIn(true);
+    }
+  }, [router.query]);
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUsername("");
+    setProfession("");
+    router.push("/login");
+  };
 
   return (
     <nav className="bg-gray-800 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center gap-4">
-          {/* Logo image next to HOME */}
-          <Link href="/">
+          
+          <Link href={`/?username=${username}&profession=${profession}`}>
             <img
               src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png"
               alt="Site Logo"
@@ -19,28 +38,29 @@ export default function Navigation() {
             />
           </Link>
 
-          <Link href="/" className="text-2xl font-bold">
+          <Link href={`/?username=${username}&profession=${profession}`} className="text-2xl font-bold">
             HOME
           </Link>
 
-          {user && (
+          
+          
+          {isLoggedIn && username && (
             <Link
-              href="/forum"
-              className="text-white hover:text-gray-300 transition-colors"
+            href={`/profile?username=${username}&profession=${profession}`}
+            className="text-white hover:text-gray-300 transition-colors ml-4"
             >
-              Forum
-            </Link>
-          )}
+              View Profile
+              </Link>
+            )}
         </div>
 
-        {/* You can uncomment this block to enable login/logout buttons again */}
-        {/* 
+        
         <div>
-          {user ? (
+          {isLoggedIn ? (
             <div className="flex items-center gap-4">
-              <span>Welcome, {user.username}!</span>
+              
               <button
-                onClick={logout}
+                onClick={handleLogout}
                 className="bg-red-500 px-4 py-2 rounded hover:bg-red-600"
               >
                 Logout
@@ -55,7 +75,6 @@ export default function Navigation() {
             </Link>
           )}
         </div>
-        */}  
       </div>
     </nav>
   );

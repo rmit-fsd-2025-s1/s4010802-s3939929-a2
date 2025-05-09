@@ -52,5 +52,23 @@ export async function registerUser(username: string, password: string, professio
     }
 }
 
+export async function getUserProfile(username: string): Promise<User | null> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/users/profile/${username}`);
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.message || "Failed to fetch user profile");
+        return null;
+      }
+  
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      alert("An error occurred. Please try again.");
+      return null;
+    }
+  }
   
 

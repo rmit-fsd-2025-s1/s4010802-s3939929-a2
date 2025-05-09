@@ -132,4 +132,21 @@ export class UserController {
     }
   }
 
+
+  async profile(request: Request, response: Response) {
+    const username = request.params.username;
+
+    try {
+      const user = await this.userRepository.findOneBy({ username });
+      
+      if (!user) {
+        return response.status(404).json({ message: "User not found" });
+      }
+
+      return response.json(user);
+    } catch (error) {
+      return response.status(500).json({ message: "Error fetching user profile", error });
+    }
+  }
+
 }

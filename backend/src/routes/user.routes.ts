@@ -22,9 +22,11 @@ router.post("/users/login", async (req, res) => {
 
 router.post("/users/signup", async (req, res) => {
     await userController.signup(req, res);
-  });
+});
   
-
+  router.get("/users/profile/:username", async (req, res) => {
+    await userController.profile(req, res);
+});
 router.put("/users/:id", async (req, res) => {
   await userController.update(req, res);
 });
