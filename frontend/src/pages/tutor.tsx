@@ -1,51 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { saveTutorApplication } from "../types/tutorStorage";
+import { saveTutorApplication } from "../services/tutorServices";
 import Navigation from "../components/Navigation";
-
-
+import { Course } from "../types/Course";
 
 const TutorPage = () => {
-  //state for each form field
-  const [name, setName] = useState("");
-  const [course, setCourse] = useState("");
-  const [previousRoles, setPreviousRoles] = useState("");
+  const [courseId, setCourseId] = useState<number | "">("");
   const [availability, setAvailability] = useState("");
   const [skills, setSkills] = useState("");
   const [academicCredentials, setAcademicCredentials] = useState("");
-
+  const [courses, setCourses] = useState<Course[]>([]);
   const router = useRouter();
-//handle submission and save app
-  const handleSubmit = (e: React.FormEvent) => {
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/courses");
+        const data = await response.json();
+        setCourses(data);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-//Validation, using trim to manage text input and checks if dropdowns aren't selected 
-    if (!name.trim()) return alert("Please enter your name.");
-    if (!course) return alert("Please select a course.");
-    if (!availability) return alert("Please select your availability.");
-    if (!previousRoles.trim()) return alert("Please enter your previous roles.");
-    if (!skills.trim()) return alert("Please list your skills.");
-    if (!academicCredentials.trim()) return alert("Please enter your academic credentials.");
-//prepare app object
+
+    const username = router.query.username as string;
+
+    if (!username) {
+      alert("You must be logged in to apply.");
+      return;
+    }
+
+    const userId = parseInt(username); // Ensure userId is a number
+
     const newApplication = {
-      id: Date.now().toString(),
-      name,
-      course,
-      previousRoles,
+      userId,
+      courseId: Number(courseId),  // Convert to number
       availability,
       skills,
       academicCredentials,
+      dateApplied: new Date().toISOString(),
     };
-//Save and redirect
-    saveTutorApplication(newApplication);
-    alert("Application Submitted!");
-    router.push("/");
+
+    const response = await saveTutorApplication(newApplication);
+    if (response) {
+      alert("Application submitted successfully!");
+      router.push(`/?username=${username}&profession=Tutor`);
+    }
   };
 
   return (
     <>
       <Head>
-        <title>Tutor Page</title>
+        <title>Tutor Application</title>
         <meta name="description" content="Enter Tutor credentials" />
       </Head>
       <Navigation />
@@ -55,38 +68,19 @@ const TutorPage = () => {
           <h1 className="text-2xl font-bold mb-6 text-center">Tutor Application</h1>
 
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-              placeholder="Enter your full name"
-            />
-          </div>
-
-          <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">Course Selection</label>
             <select
-              value={course}
-              onChange={(e) => setCourse(e.target.value)}
+              value={courseId}
+              onChange={(e) => setCourseId(Number(e.target.value))}  // Convert to number
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
             >
               <option value="">Select a course</option>
-              <option value="COSC1234">COSC1234 - Full Stack Development</option>
-              <option value="COSC5678">COSC5678 - Data Structures</option>
-              <option value="COSC9876">COSC9876 - Machine Learning</option>
+              {courses.map((course) => (
+                <option key={course.id} value={course.id}>
+                  {course.courseName}
+                </option>
+              ))}
             </select>
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Previous Roles</label>
-            <textarea
-              value={previousRoles}
-              onChange={(e) => setPreviousRoles(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-              placeholder="List your previous roles"
-            />
           </div>
 
           <div className="mb-4">
