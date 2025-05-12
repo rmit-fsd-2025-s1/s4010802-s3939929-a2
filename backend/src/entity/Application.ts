@@ -26,6 +26,12 @@ export class Application {
   selections: Selection[];
 
   @Column()
+  name: string; 
+
+  @Column()
+  role: string;
+
+  @Column()
   availability: string;
 
   @Column()

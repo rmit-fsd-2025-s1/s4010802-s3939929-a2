@@ -4,13 +4,17 @@ import Head from "next/head";
 import { saveTutorApplication } from "../services/tutorServices";
 import Navigation from "../components/Navigation";
 import { Course } from "../types/Course";
+import { useAuth } from "../context/AuthContext";
 
 const TutorPage = () => {
-  const [courseId, setCourseId] = useState<number | "">("");
+  const [name, setName] = useState("");
+  const [role, setRole] = useState("");
+  const [courseId, setCourseId] = useState("");
   const [availability, setAvailability] = useState("");
   const [skills, setSkills] = useState("");
   const [academicCredentials, setAcademicCredentials] = useState("");
   const [courses, setCourses] = useState<Course[]>([]);
+  const { user } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -30,18 +34,16 @@ const TutorPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const username = router.query.username as string;
-
-    if (!username) {
+    if (!user) {
       alert("You must be logged in to apply.");
       return;
     }
 
-    const userId = parseInt(username); // Ensure userId is a number
-
     const newApplication = {
-      userId,
-      courseId: Number(courseId),  // Convert to number
+      userId: user.id,
+      name,
+      role,
+      courseId: Number(courseId),
       availability,
       skills,
       academicCredentials,
@@ -51,7 +53,9 @@ const TutorPage = () => {
     const response = await saveTutorApplication(newApplication);
     if (response) {
       alert("Application submitted successfully!");
-      router.push(`/?username=${username}&profession=Tutor`);
+
+      
+      router.push(`/?username=${user.username}&profession=${user.profession}`);
     }
   };
 
@@ -68,10 +72,34 @@ const TutorPage = () => {
           <h1 className="text-2xl font-bold mb-6 text-center">Tutor Application</h1>
 
           <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+              placeholder="Enter your full name"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Role</label>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+            >
+              <option value="">Select a role</option>
+              <option value="Tutor">Tutor</option>
+              <option value="Lab Assistant">Lab Assistant</option>
+            </select>
+          </div>
+
+          <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">Course Selection</label>
             <select
               value={courseId}
-              onChange={(e) => setCourseId(Number(e.target.value))}  // Convert to number
+              onChange={(e) => setCourseId(e.target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
             >
               <option value="">Select a course</option>
@@ -91,8 +119,8 @@ const TutorPage = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
             >
               <option value="">Select availability</option>
-              <option value="part-time">Part Time</option>
-              <option value="full-time">Full Time</option>
+              <option value="Part-time">Part Time</option>
+              <option value="Full-time">Full Time</option>
             </select>
           </div>
 
