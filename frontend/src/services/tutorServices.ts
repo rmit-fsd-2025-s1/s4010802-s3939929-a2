@@ -19,7 +19,6 @@ export async function saveTutorApplication(application: Application) {
     }
 
     const data = await response.json();
-    alert("Application Submitted!");
     return data;
   } catch (error) {
     console.error("Error saving tutor application:", error);
