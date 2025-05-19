@@ -1,22 +1,19 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { Profile } from "./entity/Profile";
-import { Pet } from "./entity/Pet";
+import { Course } from "../src/entity/Course";
+import { User } from "../src/entity/User";
+import { Admin } from "../src/entity/Admin";
 
 export const AppDataSource = new DataSource({
   type: "mysql",
   host: "209.38.26.237",
   port: 3306,
-  /* Change to your own credentials */
-  username: "matt",
-  password: "matt",
-  database: "matt",
-  // synchronize: true will automatically create database tables based on entity definitions
-  // and update them when entity definitions change. This is useful during development
-  // but should be disabled in production to prevent accidental data loss.
+  username: "S4010802",
+  password: "S4010802",
+  database: "S4010802",
   synchronize: true,
   logging: true,
-  entities: [Profile, Pet],
+  entities: [Course, User, Admin],
   migrations: [],
   subscribers: [],
 });

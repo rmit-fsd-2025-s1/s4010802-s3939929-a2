@@ -1,63 +1,39 @@
 import gql from "graphql-tag";
 
 export const typeDefs = gql`
-  type Pet {
-    pet_id: ID!
-    name: String!
-    profiles: [Profile!]
+  type Course {
+    id: ID!
+    courseName: String!
+    code: String!
+    description: String!
+    createdAt: String!
+    updatedAt: String!
   }
 
-  type Profile {
-    profile_id: ID!
-    email: String!
-    first_name: String!
-    last_name: String!
-    mobile: String
-    street: String
-    city: String
-    state: String
-    postcode: String
-    pets: [Pet!]
+  type User {
+    id: ID!
+    username: String!
+    profession: String!
+    createdAt: String!
+    updatedAt: String!
+  }
+
+  type Admin {
+    id: ID!
+    username: String!
+    createdAt: String!
+    updatedAt: String!
   }
 
   type Query {
-    profiles: [Profile!]!
-    profile(id: ID!): Profile
-    pets: [Pet!]!
-    pet(id: ID!): Pet
+    courses: [Course!]!
+    users: [User!]!
+    admins: [Admin!]!
   }
 
   type Mutation {
-    createProfile(
-      email: String!
-      first_name: String!
-      last_name: String!
-      mobile: String
-      street: String
-      city: String
-      state: String
-      postcode: String
-    ): Profile!
-
-    updateProfile(
-      id: ID!
-      email: String
-      first_name: String
-      last_name: String
-      mobile: String
-      street: String
-      city: String
-      state: String
-      postcode: String
-    ): Profile!
-
-    deleteProfile(id: ID!): Boolean!
-
-    createPet(name: String!): Pet!
-    updatePet(id: ID!, name: String!): Pet!
-    deletePet(id: ID!): Boolean!
-
-    addPetToProfile(profileId: ID!, petId: ID!): Profile!
-    removePetFromProfile(profileId: ID!, petId: ID!): Profile!
+    createCourse(courseName: String!, code: String!, description: String!): Course!
+    createUser(username: String!, password: String!, profession: String!): User!
+    createAdmin(username: String!, password: String!): Admin!
   }
 `;

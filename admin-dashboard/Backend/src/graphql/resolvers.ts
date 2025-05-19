@@ -1,93 +1,30 @@
 import { AppDataSource } from "../data-source";
-import { Profile } from "../entity/Profile";
-import { Pet } from "../entity/Pet";
+import { Course } from "../entity/Course";
+import { User } from "../entity/User";
+import { Admin } from "../entity/Admin";
 
-const profileRepository = AppDataSource.getRepository(Profile);
-const petRepository = AppDataSource.getRepository(Pet);
+const courseRepository = AppDataSource.getRepository(Course);
+const userRepository = AppDataSource.getRepository(User);
+const adminRepository = AppDataSource.getRepository(Admin);
 
 export const resolvers = {
   Query: {
-    profiles: async () => {
-      return await profileRepository.find();
-    },
-    profile: async (_: any, { id }: { id: string }) => {
-      return await profileRepository.findOne({
-        where: { profile_id: parseInt(id) },
-      });
-    },
-    pets: async () => {
-      return await petRepository.find();
-    },
-    pet: async (_: any, { id }: { id: string }) => {
-      return await petRepository.findOne({ where: { pet_id: parseInt(id) } });
-    },
+    courses: () => courseRepository.find(),
+    users: () => userRepository.find(),
+    admins: () => adminRepository.find(),
   },
   Mutation: {
-    createProfile: async (_: any, args: any) => {
-      const profile = profileRepository.create(args);
-      return await profileRepository.save(profile);
+    createCourse: (_: any, args: any) => {
+      const course = courseRepository.create(args);
+      return courseRepository.save(course);
     },
-    updateProfile: async (
-      _: any,
-      { id, ...args }: { id: string } & Partial<Profile>
-    ) => {
-      await profileRepository.update(id, args);
-      return await profileRepository.findOne({
-        where: { profile_id: parseInt(id) },
-      });
+    createUser: (_: any, args: any) => {
+      const user = userRepository.create(args);
+      return userRepository.save(user);
     },
-    deleteProfile: async (_: any, { id }: { id: string }) => {
-      const result = await profileRepository.delete(id);
-      return result.affected !== 0;
-    },
-    createPet: async (_: any, { name }: { name: string }) => {
-      const pet = petRepository.create({ name });
-      return await petRepository.save(pet);
-    },
-    updatePet: async (_: any, { id, name }: { id: string; name: string }) => {
-      await petRepository.update(id, { name });
-      return await petRepository.findOne({ where: { pet_id: parseInt(id) } });
-    },
-    deletePet: async (_: any, { id }: { id: string }) => {
-      const result = await petRepository.delete(id);
-      return result.affected !== 0;
-    },
-    addPetToProfile: async (
-      _: any,
-      { profileId, petId }: { profileId: string; petId: string }
-    ) => {
-      const profile = await profileRepository.findOne({
-        where: { profile_id: parseInt(profileId) },
-        relations: ["pets"],
-      });
-      const pet = await petRepository.findOne({
-        where: { pet_id: parseInt(petId) },
-      });
-
-      if (!profile || !pet) {
-        throw new Error("Profile or Pet not found");
-      }
-
-      profile.pets = [...profile.pets, pet];
-      return await profileRepository.save(profile);
-    },
-    removePetFromProfile: async (
-      _: any,
-      { profileId, petId }: { profileId: string; petId: string }
-    ) => {
-      const profile = await profileRepository.findOne({
-        where: { profile_id: parseInt(profileId) },
-        relations: ["pets"],
-      });
-
-      if (!profile) {
-        throw new Error("Profile not found");
-      }
-
-      profile.pets = profile.pets.filter(
-        (pet) => pet.pet_id !== parseInt(petId)
-      );
-      return await profileRepository.save(profile);
+    createAdmin: (_: any, args: any) => {
+      const admin = adminRepository.create(args);
+      return adminRepository.save(admin);
     },
   },
 };
