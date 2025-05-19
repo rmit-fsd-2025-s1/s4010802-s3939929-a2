@@ -1,12 +1,24 @@
-export interface Profile {
-  profile_id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-}
+export type Admin = {
+  id: number;
+  username: string;
+  password: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
-export interface Pet {
-  pet_id: string;
-  name: string;
-  profile_id?: string;
-}
+export type User = {
+  id: number;
+  username: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type Course = {
+  id: number;
+  courseName: string;
+  code: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+};
