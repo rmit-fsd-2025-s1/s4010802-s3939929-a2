@@ -26,5 +26,32 @@ export const resolvers = {
       const admin = adminRepository.create(args);
       return adminRepository.save(admin);
     },
+
+    updateCourse: async (_: any, { id, courseName, code, description }: any) => {
+      const courseRepo = AppDataSource.getRepository(Course);
+      const course = await courseRepo.findOneBy({ id });
+
+      if (!course) {
+        throw new Error("Course not found");
+      }
+
+      course.courseName = courseName ?? course.courseName;
+      course.code = code ?? course.code;
+      course.description = description ?? course.description;
+
+      return await courseRepo.save(course);
+    },
+
+    deleteCourse: async (_: any, { id }: { id: number }) => {
+      const courseRepo = AppDataSource.getRepository(Course);
+      const course = await courseRepo.findOneBy({ id });
+
+      if (!course) {
+        throw new Error("Course not found");
+      }
+
+      const result = await courseRepo.delete(id);
+      return result.affected !== 0;
+    }
   },
 };

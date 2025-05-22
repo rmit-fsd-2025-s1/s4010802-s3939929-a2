@@ -35,5 +35,7 @@ export const typeDefs = gql`
     createCourse(courseName: String!, code: String!, description: String!): Course!
     createUser(username: String!, password: String!, profession: String!): User!
     createAdmin(username: String!, password: String!): Admin!
+    updateCourse(id: Int!, courseName: String, code: String, description: String): Course
+    deleteCourse(id: Int!): Boolean!
   }
 `;
