@@ -86,3 +86,62 @@ export const getCourseById = async (id: string) => {
   });
   return data.course;
 };
+
+export const createCourse = async (course: {
+  courseName: string;
+  code: string;
+  description: string;
+}) => {
+  const { data } = await client.mutate({
+    mutation: gql`
+      mutation ($courseName: String!, $code: String!, $description: String!) {
+        createCourse(
+          courseName: $courseName
+          code: $code
+          description: $description
+        ) {
+          id
+        }
+      }
+    `,
+    variables: course,
+  });
+  return data.createCourse;
+};
+
+export const updateCourse = async (
+  id: number,
+  updatedData: { courseName: string; code: string; description: string }
+) => {
+  const response = await client.mutate({
+    mutation: gql`
+      mutation UpdateCourse($id: Int!, $courseName: String, $code: String, $description: String) {
+        updateCourse(id: $id, courseName: $courseName, code: $code, description: $description) {
+          id
+          courseName
+          code
+          description
+        }
+      }
+    `,
+    variables: {
+      id,
+      ...updatedData,
+    },
+  });
+
+  return response.data.updateCourse;
+};
+
+export const deleteCourse = async (id: number) => {
+  const { data } = await client.mutate({
+    mutation: gql`
+      mutation DeleteCourse($id: Int!) {
+        deleteCourse(id: $id)
+      }
+    `,
+    variables: { id },
+  });
+  return data.deleteCourse;
+};
+
