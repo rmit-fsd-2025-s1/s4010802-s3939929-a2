@@ -16,6 +16,7 @@ export const typeDefs = gql`
     profession: String!
     createdAt: String!
     updatedAt: String!
+    blocked: Boolean!
   }
 
   type Admin {
@@ -37,5 +38,7 @@ export const typeDefs = gql`
     createAdmin(username: String!, password: String!): Admin!
     updateCourse(id: Int!, courseName: String, code: String, description: String): Course
     deleteCourse(id: Int!): Boolean!
+    blockUser(id: Int!): User!
+    unblockUser(id: Int!): User!
   }
 `;

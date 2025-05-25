@@ -24,12 +24,14 @@ export const getUsers = async () => {
         users {
           id
           username
-          email
+          profession
+          blocked
           createdAt
           updatedAt
         }
       }
     `,
+    fetchPolicy: "no-cache" 
   });
   return data.users;
 };
@@ -41,9 +43,9 @@ export const getUserById = async (id: string) => {
         user(id: ${id}) {
           id
           username
-          email
           createdAt
           updatedAt
+          blocked
         }
       }
     `,
@@ -145,3 +147,40 @@ export const deleteCourse = async (id: number) => {
   return data.deleteCourse;
 };
 
+export const blockUser = async (id: number) => {
+  const { data } = await client.mutate({
+    mutation: gql`
+      mutation BlockUser($id: Int!) {
+        blockUser(id: $id) {
+          id
+          username
+          profession
+          blocked
+          createdAt
+          updatedAt
+        }
+      }
+    `,
+    variables: { id },
+  });
+  return data.blockUser;
+};
+
+export const unblockUser = async (id: number) => {
+  const { data } = await client.mutate({
+    mutation: gql`
+      mutation UnblockUser($id: Int!) {
+        unblockUser(id: $id) {
+          id
+          username
+          profession
+          blocked
+          createdAt
+          updatedAt
+        }
+      }
+    `,
+    variables: { id },
+  });
+  return data.unblockUser;
+};
