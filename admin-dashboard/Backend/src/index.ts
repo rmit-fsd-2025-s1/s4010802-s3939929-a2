@@ -1,4 +1,3 @@
-// src/index.ts
 import express from "express";
 import http from "http";
 import cors from "cors";
@@ -27,7 +26,7 @@ const startServer = async () => {
 
     const PORT = 3001;
     httpServer.listen(PORT, () => {
-      console.log(`🚀 Server ready at http://localhost:${PORT}/graphql`);
+      console.log(`Server ready at http://localhost:${PORT}/graphql`);
     });
   } catch (error) {
     console.error("Failed to start server:", error);
