@@ -30,4 +30,7 @@ export class User {
 
   @OneToMany(() => Application, (application) => application.user)
   applications: Application[];
+
+  @Column({ default: false })
+  blocked: boolean;
 }

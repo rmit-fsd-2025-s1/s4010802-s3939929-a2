@@ -14,26 +14,48 @@ export default function AuthPage() {
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (isLogin) {
-      // Login Logic
-      const user = await loginUser(formData.username, formData.password, formData.profession);
-      if (user) {
-        alert(`Logged in successfully as ${user.profession}!`);
+  if (isLogin) {
+    try {
+      const user = await loginUser(
+        formData.username,
+        formData.password,
+        formData.profession
+      );
 
-        // Redirect to Home Page with username and profession as query parameters
-        router.push(`/?username=${user.username}&profession=${user.profession}`);
+      if (!user) {
+        alert("Login failed. You might be blocked or provided invalid credentials.");
+        router.push("/"); 
+        return;
       }
-    } else {
-      // Signup Logic
-      const user = await registerUser(formData.username, formData.password, formData.profession);
+
+      const { username, profession } = user;
+      alert(`Logged in successfully as ${profession}!`);
+      router.push(`/?username=${username}&profession=${profession}`);
+    } catch (err) {
+      console.error("Login crash:", err);
+      alert("Unexpected error during login.");
+    }
+  } else {
+    try {
+      const user = await registerUser(
+        formData.username,
+        formData.password,
+        formData.profession
+      );
+
       if (user) {
         alert(`User registered successfully as ${user.profession}!`);
-        setIsLogin(true); // Switch to login after successful signup
+        setIsLogin(true);
       }
+    } catch (err) {
+      console.error("Registration crash:", err);
+      alert("Unexpected error during registration.");
     }
-  };
+  }
+};
+
 
   return (
     <>
