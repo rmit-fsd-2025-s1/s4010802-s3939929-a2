@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { User } from "../entity/User";
-import bcrypt from "bcrypt";
+
 
 export class UserController {
   private userRepository = AppDataSource.getRepository(User);
@@ -24,10 +24,11 @@ export class UserController {
     const { username, password, profession } = req.body;
 
     try {
-      const hashedPassword = await bcrypt.hash(password, 10);
+      //const hashedPassword = await bcrypt.hash(password, 10);
+      const plainpassword = password;
       const user = this.userRepository.create({
         username,
-        password: hashedPassword,
+        password: plainpassword,
         profession,
       });
       const savedUser = await this.userRepository.save(user);
@@ -43,21 +44,22 @@ export class UserController {
   try {
     const user = await this.userRepository.findOneBy({ username });
 
-    if (!user || user.password !== password || user.profession !== profession) {
+    if (!user) {
       res.status(401).json({ message: "Invalid credentials" });
       return;
     }
-    const userData = {
-      ...user,
-      blocked: !!user.blocked
-    };
 
-    if (userData.blocked) {
-      res.status(403).json({ message: "User is blocked by admin", user: userData });
+    if (user.password !== password || user.profession !== profession) {
+      res.status(401).json({ message: "Invalid credentials" });
       return;
     }
 
-    res.status(200).json({ message: "Login successful", user: userData });
+    if (user.blocked) {
+      res.status(403).json({ message: "User is blocked by admin", user });
+      return;
+    }
+
+    res.status(200).json({ message: "Login successful", user });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -113,10 +115,11 @@ export class UserController {
         return;
       }
 
-      const hashedPassword = await bcrypt.hash(password, 10);
+      //const hashedPassword = await bcrypt.hash(password, 10);
+      const plainpassword = password;
       const user = this.userRepository.create({
         username,
-        password: hashedPassword,
+        password : plainpassword,
         profession,
       });
 

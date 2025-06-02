@@ -24,7 +24,7 @@ const startServer = async () => {
     await server.start();
     app.use("/graphql", cors(), json(), expressMiddleware(server));
 
-    const PORT = 3001;
+    const PORT = 3003;
     httpServer.listen(PORT, () => {
       console.log(`Server ready at http://localhost:${PORT}/graphql`);
     });

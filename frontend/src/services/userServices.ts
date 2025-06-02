@@ -1,6 +1,6 @@
 import { User } from "../types/user";
 
-const API_BASE_URL = "http://127.0.0.1:3001/api";
+const API_BASE_URL = "http://127.0.0.1:3004/api";
 
 export async function loginUser(username: string, password: string, profession: string): Promise<User | null> {
   try {
@@ -36,7 +36,7 @@ export async function loginUser(username: string, password: string, profession: 
 
 export async function registerUser(username: string, password: string, profession: string): Promise<User | null> {
   try {
-    const response = await fetch(`${API_BASE_URL}/users`, {
+    const response = await fetch(`${API_BASE_URL}/users/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
