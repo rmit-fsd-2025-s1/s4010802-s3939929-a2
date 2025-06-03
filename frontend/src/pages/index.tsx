@@ -76,12 +76,12 @@ export default function Home() {
 
           {isLoggedIn ? (
             <div className="flex items-center gap-4">
-              <Link
+              {/* <Link
                 href={`/profile?username=${username}`}
                 className="bg-gray-600 px-4 py-2 rounded hover:bg-gray-700"
               >
                 View Profile
-              </Link>
+              </Link> */}
 
               <button
                 onClick={handleLogout}

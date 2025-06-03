@@ -1,7 +1,4 @@
-import { Course } from "./Course";
-
 export type Application = {
-  userId: number;
   courseId: number;
   name: String;
   role: String;
@@ -9,5 +6,4 @@ export type Application = {
   skills: string;
   academicCredentials: string;
   dateApplied: string;
-  course?: Course;
 };

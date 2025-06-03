@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { Application } from "../entity/Application";
+import { User } from "../entity/User";
 
 export class ApplicationController {
   private applicationRepository = AppDataSource.getRepository(Application);
+  private userRepository = AppDataSource.getRepository(User);
 
   async all(request: Request, response: Response) {
     try {
@@ -36,16 +38,23 @@ export class ApplicationController {
     }
   }
 
+
   async save(request: Request, response: Response) {
     try {
-      const { userId, name, role, courseId, availability, skills, academicCredentials } = request.body;
-      
-      if (!userId || !name || !role || !courseId || !availability || !skills || !academicCredentials) {
+      const {
+        name,
+        role,
+        courseId,
+        availability,
+        skills,
+        academicCredentials,
+      } = request.body;
+
+      if (!name || !role || !courseId || !availability || !skills || !academicCredentials) {
         return response.status(400).json({ message: "All fields are required" });
       }
 
       const application = this.applicationRepository.create({
-        user: { id: userId },
         course: { id: courseId },
         name,
         role,
@@ -58,16 +67,19 @@ export class ApplicationController {
       const savedApplication = await this.applicationRepository.save(application);
       return response.status(201).json(savedApplication);
     } catch (error) {
-      console.error(error);
-      return response.status(400).json({ message: "Error creating application", error });
+      console.error("Error creating application:", error);
+      return response.status(500).json({ message: "Error creating application", error });
     }
   }
+
+
+
 
   async update(request: Request, response: Response) {
     try {
       const id = parseInt(request.params.id);
       const { availability, skills, academicCredentials } = request.body;
-      
+
       let application = await this.applicationRepository.findOneBy({ id });
 
       if (!application) {

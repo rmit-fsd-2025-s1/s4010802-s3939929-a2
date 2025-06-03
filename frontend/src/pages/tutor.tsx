@@ -4,9 +4,8 @@ import Head from "next/head";
 import { saveTutorApplication } from "../services/tutorServices";
 import Navigation from "../components/Navigation";
 import { Course } from "../types/Course";
-import { useAuth } from "../context/AuthContext";
+
 const TutorPage = () => {
-  const { user } = useAuth();
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const [courseId, setCourseId] = useState("");
@@ -41,7 +40,6 @@ const TutorPage = () => {
     if (!academicCredentials.trim()) return alert("Please enter your academic credentials.");
 
     const newApplication = {
-      userId: 1, 
       name,
       role,
       courseId: Number(courseId),
@@ -60,10 +58,7 @@ const TutorPage = () => {
       setAvailability("");
       setSkills("");
       setAcademicCredentials("");
-      if (user) {
-        router.push(`/?username=${user.username}&profession=${user.profession}`);
-    }
-    
+      router.push("/tutor");
     }
   };
 
@@ -79,7 +74,6 @@ const TutorPage = () => {
         <div className="bg-white p-8 rounded-lg shadow-md w-96">
           <h1 className="text-2xl font-bold mb-6 text-center">Tutor Application</h1>
 
-          
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">Name</label>
             <input
@@ -91,7 +85,6 @@ const TutorPage = () => {
             />
           </div>
 
-          
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">Role</label>
             <select
@@ -105,7 +98,6 @@ const TutorPage = () => {
             </select>
           </div>
 
-          
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">Course Selection</label>
             <select
@@ -122,7 +114,6 @@ const TutorPage = () => {
             </select>
           </div>
 
-          
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">Availability</label>
             <select
@@ -136,7 +127,6 @@ const TutorPage = () => {
             </select>
           </div>
 
-          
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">Skills</label>
             <textarea
@@ -147,7 +137,6 @@ const TutorPage = () => {
             />
           </div>
 
-          
           <div className="mb-6">
             <label className="block text-gray-700 text-sm font-bold mb-2">Academic Credentials</label>
             <textarea
@@ -158,7 +147,6 @@ const TutorPage = () => {
             />
           </div>
 
-          
           <button
             type="submit"
             onClick={handleSubmit}
