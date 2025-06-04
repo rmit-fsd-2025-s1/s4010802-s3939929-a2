@@ -14,6 +14,8 @@ export const resolvers = {
     admins: () => adminRepository.find(),
   },
 
+  
+
   Mutation: {
     createCourse: (_: any, args: any) => {
       const course = courseRepository.create(args);
