@@ -83,7 +83,7 @@ export default function LecturerPage() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ rank }),
+      body: JSON.stringify({ rank, comment: comments[id] || "" }), // Include both rank and comment
     })
       .then((response) => response.json())
       .then((data) => {
@@ -92,7 +92,7 @@ export default function LecturerPage() {
       .catch((error) => {
         console.error("Error updating ranking:", error);
       });
-  };
+}
 
   // Update comment of a candidate in MySQL
   const updateComment = (id: string, comment: string) => {
@@ -103,7 +103,7 @@ export default function LecturerPage() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ comment }),
+      body: JSON.stringify({ comment, rank: rankings[id] || 0 }), // Include both comment and rank
     })
       .then((response) => response.json())
       .then((data) => {

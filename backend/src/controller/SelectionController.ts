@@ -43,19 +43,27 @@ export class SelectionController {
   async update(request: Request, response: Response) {
     const id = parseInt(request.params.id);
     const { rank, comment } = request.body;
+
     let selection = await this.selectionRepository.findOneBy({ id });
 
     if (!selection) {
       return response.status(404).json({ message: "Selection not found" });
     }
 
-    selection.rank = rank || selection.rank;
-    selection.comment = comment || selection.comment;
+    // Update rank and comment only if they are provided in the request body
+    if (rank !== undefined) {
+      selection.rank = rank;
+    }
+
+    if (comment !== undefined) {
+      selection.comment = comment;
+    }
 
     try {
       const updatedSelection = await this.selectionRepository.save(selection);
       return response.json(updatedSelection);
     } catch (error) {
+      console.error("Error updating selection:", error);
       return response.status(400).json({ message: "Error updating selection", error });
     }
   }
