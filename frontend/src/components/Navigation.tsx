@@ -13,7 +13,6 @@ export default function Navigation() {
     const storedUsername = queryParams.get("username");
     const storedProfession = queryParams.get("profession");
 
-    
     if (storedUsername && storedProfession) {
       setUsername(storedUsername);
       setProfession(storedProfession);
@@ -29,7 +28,7 @@ export default function Navigation() {
   };
 
   return (
-    <nav className="bg-gray-800 text-white p-4">
+    <nav className="bg-transparent backdrop-blur-sm text-white p-4 fixed top-0 left-0 w-full z-10">
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center gap-4">
           <Link href={`/?username=${username}&profession=${profession}`}>
@@ -40,7 +39,6 @@ export default function Navigation() {
             />
           </Link>
 
-          
           <Link href={`/?username=${username}&profession=${profession}`} className="text-2xl font-bold">
             HOME
           </Link>
@@ -62,6 +60,7 @@ export default function Navigation() {
             </>
           )}
         </div>
+
         <div>
           {isLoggedIn ? (
             <button

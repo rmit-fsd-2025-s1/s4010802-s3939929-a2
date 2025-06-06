@@ -14,7 +14,7 @@ export default function AuthPage() {
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
   if (isLogin) {
     try {
@@ -56,7 +56,6 @@ export default function AuthPage() {
   }
 };
 
-
   return (
     <>
       <Head>
@@ -64,47 +63,49 @@ export default function AuthPage() {
         <meta name="description" content="User authentication page" />
       </Head>
       <Navigation />
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="bg-white p-8 rounded-lg shadow-md w-96">
-          <h1 className="text-2xl font-bold mb-6 text-center">
+      
+      <div className="relative min-h-screen flex items-center justify-center bg-gray-900 bg-opacity-50">
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("/fractalBackground.png")' }} />
+        <div className="relative bg-gradient-to-r from-blue-800 to-purple-800 bg-opacity-80 backdrop-blur-md p-8 rounded-lg shadow-lg w-96 z-10">
+          <h1 className="text-2xl font-bold mb-6 text-center text-white">
             {isLogin ? "Login" : "Sign Up"}
           </h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label className="block text-white text-sm font-bold mb-2">
                 Username (Email)
               </label>
               <input
                 type="text"
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-black focus:outline-none focus:border-blue-500"
                 placeholder="Enter your email"
                 required
               />
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label className="block text-white text-sm font-bold mb-2">
                 Password
               </label>
               <input
                 type="password"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-black focus:outline-none focus:border-blue-500"
                 required
               />
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label className="block text-white text-sm font-bold mb-2">
                 Profession
               </label>
               <select
                 value={formData.profession}
                 onChange={(e) => setFormData({ ...formData, profession: e.target.value })}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-black focus:outline-none focus:border-blue-500"
                 required
               >
                 <option value="" disabled>Select Profession</option>
@@ -126,7 +127,7 @@ export default function AuthPage() {
           <div className="mt-4 text-center">
             {isLogin ? (
               <>
-                <p>Don't have an account?</p>
+                <p className="text-white">Don't have an account?</p>
                 <button
                   className="text-blue-500 hover:text-blue-700 font-bold"
                   onClick={() => setIsLogin(false)}
@@ -136,7 +137,7 @@ export default function AuthPage() {
               </>
             ) : (
               <>
-                <p>Already have an account?</p>
+                <p className="text-white">Already have an account?</p>
                 <button
                   className="text-blue-500 hover:text-blue-700 font-bold"
                   onClick={() => setIsLogin(true)}

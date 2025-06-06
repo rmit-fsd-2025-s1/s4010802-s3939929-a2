@@ -70,90 +70,107 @@ const TutorPage = () => {
       </Head>
       <Navigation />
 
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="bg-white p-8 rounded-lg shadow-md w-96">
-          <h1 className="text-2xl font-bold mb-6 text-center">Tutor Application</h1>
+      <div className="relative min-h-screen flex items-center justify-center bg-gray-900 bg-opacity-50">
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("/fractalBackground.png")' }} />
+        <div className="relative bg-gradient-to-r from-blue-800 to-purple-800 bg-opacity-80 backdrop-blur-md p-8 rounded-lg shadow-lg w-96 z-10">
+          <h1 className="text-2xl font-bold mb-6 text-center text-white">
+            Tutor Application
+          </h1>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-              placeholder="Enter your full name"
-            />
-          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label className="block text-white text-sm font-bold mb-2">
+                Name
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-black focus:outline-none focus:border-blue-500"
+                placeholder="Enter your full name"
+                required
+              />
+            </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Role</label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+            <div className="mb-4">
+              <label className="block text-white text-sm font-bold mb-2">
+                Role
+              </label>
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-black focus:outline-none focus:border-blue-500"
+              >
+                <option value="">Select a role</option>
+                <option value="Tutor">Tutor</option>
+                <option value="Lab Assistant">Lab Assistant</option>
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-white text-sm font-bold mb-2">
+                Course Selection
+              </label>
+              <select
+                value={courseId}
+                onChange={(e) => setCourseId(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-black focus:outline-none focus:border-blue-500"
+              >
+                <option value="">Select a course</option>
+                {courses.map((course) => (
+                  <option key={course.id} value={course.id}>
+                    {course.courseName}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-white text-sm font-bold mb-2">
+                Availability
+              </label>
+              <select
+                value={availability}
+                onChange={(e) => setAvailability(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-black focus:outline-none focus:border-blue-500"
+              >
+                <option value="">Select availability</option>
+                <option value="part-time">Part Time</option>
+                <option value="full-time">Full Time</option>
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-white text-sm font-bold mb-2">
+                Skills
+              </label>
+              <textarea
+                value={skills}
+                onChange={(e) => setSkills(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-black focus:outline-none focus:border-blue-500"
+                placeholder="List your skills (e.g., React, Node.js, Java)"
+              />
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-white text-sm font-bold mb-2">
+                Academic Credentials
+              </label>
+              <textarea
+                value={academicCredentials}
+                onChange={(e) => setAcademicCredentials(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-black focus:outline-none focus:border-blue-500"
+                placeholder="List your academic credentials"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
             >
-              <option value="">Select a role</option>
-              <option value="Tutor">Tutor</option>
-              <option value="Lab Assistant">Lab Assistant</option>
-            </select>
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Course Selection</label>
-            <select
-              value={courseId}
-              onChange={(e) => setCourseId(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-            >
-              <option value="">Select a course</option>
-              {courses.map((course) => (
-                <option key={course.id} value={course.id}>
-                  {course.courseName}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Availability</label>
-            <select
-              value={availability}
-              onChange={(e) => setAvailability(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-            >
-              <option value="">Select availability</option>
-              <option value="part-time">Part Time</option>
-              <option value="full-time">Full Time</option>
-            </select>
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Skills</label>
-            <textarea
-              value={skills}
-              onChange={(e) => setSkills(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-              placeholder="List your skills (e.g., React, Node.js, Java)"
-            />
-          </div>
-
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Academic Credentials</label>
-            <textarea
-              value={academicCredentials}
-              onChange={(e) => setAcademicCredentials(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-              placeholder="List your academic credentials"
-            />
-          </div>
-
-          <button
-            type="submit"
-            onClick={handleSubmit}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
-          >
-            Submit Application
-          </button>
+              Submit Application
+            </button>
+          </form>
         </div>
       </div>
     </>

@@ -1,5 +1,3 @@
-
-
 import Link from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -59,7 +57,7 @@ export default function Home() {
       </Head>
 
       
-      <nav className="bg-gray-800 text-white p-4">
+      <nav className="bg-transparent backdrop-blur-sm text-white p-4 fixed top-0 left-0 w-full z-10 border-b-2 border-gray-300">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
             <Link href={`/?username=${username}&profession=${profession}`}>
@@ -69,44 +67,54 @@ export default function Home() {
                 className="w-8 h-8"
               />
             </Link>
-            <Link href={`/?username=${username}&profession=${profession}`} className="text-2xl font-bold">
+            <Link href={`/?username=${username}&profession=${profession}`} className="text-gray-800 text-3xl font-bold mb-2 drop-shadow-lg">
               HOME
             </Link>
+
+            {isLoggedIn && (
+              <>
+                {/* <Link
+                  href={`/profile?username=${username}&profession=${profession}`}
+                  className="text-white hover:text-gray-300 transition-colors ml-4"
+                >
+                  View Profile
+                </Link> */}
+                <Link
+                  href={`/tutor?username=${username}&profession=${profession}`}
+                  className="text-white hover:text-gray-300 transition-colors ml-4"
+                >
+                  Apply as Tutor
+                </Link>
+              </>
+            )}
           </div>
 
-          {isLoggedIn ? (
-            <div className="flex items-center gap-4">
-              {/* <Link
-                href={`/profile?username=${username}`}
-                className="bg-gray-600 px-4 py-2 rounded hover:bg-gray-700"
-              >
-                View Profile
-              </Link> */}
-
+          <div>
+            {isLoggedIn ? (
               <button
                 onClick={handleLogout}
                 className="bg-red-500 px-4 py-2 rounded hover:bg-red-600"
               >
                 Logout
               </button>
-            </div>
-          ) : (
-            <Link
-              href="/login"
-              className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
-            >
-              Login
-            </Link>
-          )}
+            ) : (
+              <Link
+                href="/login"
+                className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
+              >
+                Login
+              </Link>
+            )}
+          </div>
         </div>
       </nav>
 
       
-      <div className="container mx-auto px-4 py-12 text-center">
+      <div className="container mx-auto px-4 py-12 text-center mt-20">
         {isLoggedIn ? (
           <>
-            <p className="text-gray-700 text-3xl font-bold mb-2">WELCOME {username}</p>
-            <p className="text-gray-500 mb-6">
+            <p className="text-gray-800 text-3xl font-bold mb-2 drop-shadow-lg">WELCOME {username}</p>
+            <p className="text-gray-700 mb-6 drop-shadow-md">
               Ready to take the next step in your teaching journey?
             </p>
 
@@ -128,14 +136,13 @@ export default function Home() {
           </>
         ) : (
           <>
-            <p className="text-gray-700 text-3xl font-bold mb-2">WELCOME</p>
-            <p className="text-gray-500 mb-6">
+            <p className="text-gray-800 text-3xl font-bold mb-2 drop-shadow-lg">WELCOME</p>
+            <p className="text-gray-700 mb-6 drop-shadow-md">
               Helping tutors and lecturers connect and collaborate effectively.
             </p>
           </>
         )}
       </div>
-
       
       <div className="relative max-w-4xl mx-auto mt-8">
         <img

@@ -35,17 +35,18 @@ export default function LecturerPage() {
 
     fetchApplications();
   }, []);
-  //make filters
+
   const afterFilter = applications.filter((app) => {
-  const matchesCourse = filteredCourse === "" || app.course?.courseCode === filteredCourse;
-  const search = searchTerm.toLowerCase();
-  const matchesSession = filteredSessionType === "" || app.role === filteredSessionType;
-  const matchesSearch =
-    searchTerm === "" ||
-    (app.course?.courseName && app.course?.courseName.toLowerCase().includes(search)) ||
-    (app.name && app.name.toLowerCase().includes(search)) ||
-    (app.availability && app.availability.toLowerCase().includes(search)) ||
-    (app.skills && app.skills.toLowerCase().includes(search));
+    const matchesCourse = filteredCourse === "" || app.course?.courseCode === filteredCourse;
+    const search = searchTerm.toLowerCase();
+    const matchesSession = filteredSessionType === "" || app.role === filteredSessionType;
+    const matchesSearch =
+      searchTerm === "" ||
+      (app.course?.courseName && app.course?.courseName.toLowerCase().includes(search)) ||
+      (app.name && app.name.toLowerCase().includes(search)) ||
+      (app.availability && app.availability.toLowerCase().includes(search)) ||
+      (app.skills && app.skills.toLowerCase().includes(search));
+
     return matchesCourse && matchesSession && matchesSearch;
   });
 
@@ -54,7 +55,7 @@ export default function LecturerPage() {
     if (sortBy === "availability") return a.availability?.localeCompare(b.availability);
     return 0;
   });
-  //save the selection in DB
+
   const selectCandidate = async (id: string) => {
     const newCount = (selectedCandidates[id] || 0) + 1;
     const updated = { ...selectedCandidates, [id]: newCount };
@@ -71,14 +72,14 @@ export default function LecturerPage() {
           tutorName: applications.find(app => app.id === id)?.name || "Unknown",
           rank: rankings[id] || 0,
           comment: comments[id] || "",
-          lecturerUsername: router.query.username || "Unknown"
+          lecturerUsername: router.query.username || "Unknown",
         }),
       });
     } catch (error) {
       console.error("Error saving selection to DB:", error);
     }
   };
-  //save the rank and comment in DB
+
   const submitRankingAndComment = async (id: string) => {
     const rank = rankings[id] || 0;
     const comment = comments[id] || "";
@@ -88,7 +89,6 @@ export default function LecturerPage() {
       return;
     }
 
-    // Always update the backend with new rank/comment
     try {
       await fetch(`http://localhost:3004/api/selections/${id}`, {
         method: "PUT",
@@ -141,18 +141,18 @@ export default function LecturerPage() {
         <meta name="description" content="View tutor applications by course" />
       </Head>
 
-      <div className="min-h-screen bg-gray-100 py-10 px-4">
-        <div className="max-w-4xl mx-auto">
+      <div className="min-h-screen bg-gray-900 bg-opacity-50 py-10 px-4">
+        <div className="max-w-4xl mx-auto bg-gradient-to-r from-blue-800 to-purple-800 bg-opacity-80 backdrop-blur-md p-8 rounded-lg shadow-lg">
           <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-center">Tutor Applications</h1>
+            <h1 className="text-3xl font-bold text-center text-white">Tutor Applications</h1>
             <button onClick={handleLogout} className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded">
               Logout
             </button>
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Course:</label>
-            <select value={filteredCourse} onChange={(e) => setFilteredCourse(e.target.value)} className="w-full p-2 border border-gray-300 rounded">
+            <label className="block text-white text-sm font-medium mb-1">Filter by Course:</label>
+            <select value={filteredCourse} onChange={(e) => setFilteredCourse(e.target.value)} className="w-full p-2 border border-gray-300 rounded text-black">
               <option value="">All Courses</option>
               <option value="COSC1234">COSC1234 - Full Stack Development</option>
               <option value="COSC5678">COSC5678 - Data Structures</option>
@@ -161,19 +161,19 @@ export default function LecturerPage() {
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Search (Name, Availability, Skills):</label>
+            <label className="block text-white text-sm font-medium mb-1">Search (Name, Availability, Skills):</label>
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 rounded text-black"
               placeholder="e.g. John, Monday, React"
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Role:</label>
-            <select value={filteredSessionType} onChange={(e) => setFilteredSessionType(e.target.value)} className="w-full p-2 border border-gray-300 rounded">
+            <label className="block text-white text-sm font-medium mb-1">Filter by Role:</label>
+            <select value={filteredSessionType} onChange={(e) => setFilteredSessionType(e.target.value)} className="w-full p-2 border border-gray-300 rounded text-black">
               <option value="">All Roles</option>
               <option value="Tutor">Tutor</option>
               <option value="Lab Assistant">Lab Assistant</option>
@@ -181,8 +181,8 @@ export default function LecturerPage() {
           </div>
 
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Sort by:</label>
-            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full p-2 border border-gray-300 rounded">
+            <label className="block text-white text-sm font-medium mb-1">Sort by:</label>
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full p-2 border border-gray-300 rounded text-black">
               <option value="">None</option>
               <option value="course">Course Name (A-Z)</option>
               <option value="availability">Availability (A-Z)</option>
@@ -212,22 +212,22 @@ export default function LecturerPage() {
                   </div>
 
                   <div className="mt-2">
-                    <label className="block text-sm font-medium text-gray-700">Rank (1 = highest preference):</label>
+                    <label className="block text-sm font-medium text-gray-700 text-white">Rank (1 = highest preference):</label>
                     <input
                       type="number"
                       min={1}
                       value={rankings[app.id] || ""}
                       onChange={(e) => updateRanking(app.id, Number(e.target.value))}
-                      className="w-full mt-1 p-2 border border-gray-300 rounded"
+                      className="w-full mt-1 p-2 border border-gray-300 rounded text-black"
                     />
                   </div>
 
                   <div className="mt-2">
-                    <label className="block text-sm font-medium text-gray-700">Comments:</label>
+                    <label className="block text-sm font-medium text-gray-700 text-white">Comments:</label>
                     <textarea
                       value={comments[app.id] || ""}
                       onChange={(e) => updateComment(app.id, e.target.value)}
-                      className="w-full mt-1 p-2 border border-gray-300 rounded"
+                      className="w-full mt-1 p-2 border border-gray-300 rounded text-black"
                       placeholder="Enter comments for this candidate"
                     />
                   </div>
