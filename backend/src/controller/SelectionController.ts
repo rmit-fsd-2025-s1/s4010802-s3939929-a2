@@ -25,11 +25,13 @@ export class SelectionController {
   }
 
   async save(request: Request, response: Response) {
-    const { applicationId, rank, comment } = request.body;
+    const { applicationId, rank, comment, tutorName, lecturerUsername } = request.body;
     const selection = this.selectionRepository.create({
       application: { id: applicationId },
       rank,
       comment,
+      tutorName,
+      lecturerUsername,
     });
 
     try {
@@ -41,16 +43,21 @@ export class SelectionController {
   }
 
   async update(request: Request, response: Response) {
-    const id = parseInt(request.params.id);
+    const applicationId = parseInt(request.params.id); // This is applicationId from frontend
     const { rank, comment } = request.body;
 
-    let selection = await this.selectionRepository.findOneBy({ id });
+    // Find selection using application.id
+    const selection = await this.selectionRepository.findOne({
+      where: {
+        application: { id: applicationId },
+      },
+      relations: ["application"],
+    });
 
     if (!selection) {
-      return response.status(404).json({ message: "Selection not found" });
+      return response.status(404).json({ message: "Selection not found for this application" });
     }
 
-    // Update rank and comment only if they are provided in the request body
     if (rank !== undefined) {
       selection.rank = rank;
     }

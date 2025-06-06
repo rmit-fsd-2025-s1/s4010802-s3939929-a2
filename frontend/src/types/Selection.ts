@@ -4,5 +4,7 @@ export type Selection = {
     selectionDetails: string;
     createdAt: string;
     updatedAt: string;
+    tutorName: String;
+    lecturerUsername: String
   };
   

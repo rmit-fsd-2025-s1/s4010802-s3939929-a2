@@ -31,5 +31,12 @@ import {
   
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @Column()
+    tutorName: string;
+
+    @Column()
+    lecturerUsername: String;
+
   }
   

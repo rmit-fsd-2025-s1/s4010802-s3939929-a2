@@ -12,6 +12,7 @@ export default function LecturerPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("");
   const router = useRouter();
+  const [filteredSessionType, setFilteredSessionType] = useState<string>("");
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -20,11 +21,10 @@ export default function LecturerPage() {
         const data = await response.json();
         setApplications(data);
 
-        // Fetch selections for persistence
         const selectionResponse = await fetch("http://localhost:3004/api/selections");
         const selectionData = await selectionResponse.json();
         const selectedCandidatesData = selectionData.reduce((acc: any, selection: any) => {
-          acc[selection.application.id] = selection.rank; // Assuming you store rank here
+          acc[selection.application.id] = selection.rank;
           return acc;
         }, {});
         setSelectedCandidates(selectedCandidatesData);
@@ -35,19 +35,18 @@ export default function LecturerPage() {
 
     fetchApplications();
   }, []);
-
-  // Filter applications based on course and search term
+  //make filters
   const afterFilter = applications.filter((app) => {
-    const matchesCourse = filteredCourse === "" || app.course?.courseName === filteredCourse;
-    const search = searchTerm.toLowerCase();
-    const matchesSearch =
-      searchTerm === "" ||
-      (app.course?.courseName && app.course?.courseName.toLowerCase().includes(search)) ||
-      (app.name && app.name.toLowerCase().includes(search)) ||
-      (app.availability && app.availability.toLowerCase().includes(search)) ||
-      (app.skills && app.skills.toLowerCase().includes(search));
-
-    return matchesCourse && matchesSearch;
+  const matchesCourse = filteredCourse === "" || app.course?.courseCode === filteredCourse;
+  const search = searchTerm.toLowerCase();
+  const matchesSession = filteredSessionType === "" || app.role === filteredSessionType;
+  const matchesSearch =
+    searchTerm === "" ||
+    (app.course?.courseName && app.course?.courseName.toLowerCase().includes(search)) ||
+    (app.name && app.name.toLowerCase().includes(search)) ||
+    (app.availability && app.availability.toLowerCase().includes(search)) ||
+    (app.skills && app.skills.toLowerCase().includes(search));
+    return matchesCourse && matchesSession && matchesSearch;
   });
 
   const filteredApps = afterFilter.sort((a, b) => {
@@ -55,32 +54,56 @@ export default function LecturerPage() {
     if (sortBy === "availability") return a.availability?.localeCompare(b.availability);
     return 0;
   });
-
-  const selectCandidate = (id: string) => {
+  //save the selection in DB
+  const selectCandidate = async (id: string) => {
     const newCount = (selectedCandidates[id] || 0) + 1;
     const updated = { ...selectedCandidates, [id]: newCount };
     setSelectedCandidates(updated);
-  };
 
-  // Handle submitting both ranking and comments
-  const submitRankingAndComment = (id: string) => {
+    try {
+      await fetch(`http://localhost:3004/api/selections`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          applicationId: id,
+          tutorName: applications.find(app => app.id === id)?.name || "Unknown",
+          rank: rankings[id] || 0,
+          comment: comments[id] || "",
+          lecturerUsername: router.query.username || "Unknown"
+        }),
+      });
+    } catch (error) {
+      console.error("Error saving selection to DB:", error);
+    }
+  };
+  //save the rank and comment in DB
+  const submitRankingAndComment = async (id: string) => {
     const rank = rankings[id] || 0;
     const comment = comments[id] || "";
 
-    fetch(`http://localhost:3004/api/selections/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ rank, comment }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        alert("Rank and comment submitted successfully!");
-      })
-      .catch((error) => {
-        console.error("Error updating ranking/comment:", error);
+    if (!selectedCandidates[id]) {
+      alert("Please select the candidate before submitting ranking/comment.");
+      return;
+    }
+
+    // Always update the backend with new rank/comment
+    try {
+      await fetch(`http://localhost:3004/api/selections/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          rank,
+          comment,
+        }),
       });
+      alert("Rank and comment submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting ranking/comment:", error);
+    }
   };
 
   const updateRanking = (id: string, rank: number) => {
@@ -148,6 +171,15 @@ export default function LecturerPage() {
             />
           </div>
 
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Filter by Role:</label>
+            <select value={filteredSessionType} onChange={(e) => setFilteredSessionType(e.target.value)} className="w-full p-2 border border-gray-300 rounded">
+              <option value="">All Roles</option>
+              <option value="Tutor">Tutor</option>
+              <option value="Lab Assistant">Lab Assistant</option>
+            </select>
+          </div>
+
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-1">Sort by:</label>
             <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full p-2 border border-gray-300 rounded">
@@ -168,6 +200,7 @@ export default function LecturerPage() {
                   <p><strong>Availability:</strong> {app.availability}</p>
                   <p><strong>Skills:</strong> {app.skills}</p>
                   <p><strong>Academic Credentials:</strong> {app.academicCredentials}</p>
+                  <p><strong>Role Selected:</strong> {app.role || "N/A"}</p>
 
                   <div className="mt-4">
                     <button
@@ -221,7 +254,7 @@ export default function LecturerPage() {
                 <Tooltip />
                 <Bar dataKey="selected" minPointSize={30}>
                   {chartData.map((entry, index) => {
-                    let color = "#3182ce"; // default blue
+                    let color = "#3182ce"; //default blue
                     return <Cell key={`cell-${index}`} fill={color} />;
                   })}
                 </Bar>
