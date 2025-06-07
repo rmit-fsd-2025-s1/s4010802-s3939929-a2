@@ -29,7 +29,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="bg-gray-800 text-white p-4 flex justify-between items-center">
+    <nav className="bg-gradient-to-r from-teal-500 to-teal-600 text-white p-4 flex justify-between items-center">
       <Link href="/" className="text-2xl font-bold">
         TT Webpage
       </Link>
@@ -38,6 +38,13 @@ const Navigation = () => {
         {isLoggedIn ? (
           <>
             <span className="mr-4">Welcome, {username}</span>
+            {isAdmin && (
+              <>
+                <Link href="/admin/manageLecturers" className="button mr-4">Manage Lecturers</Link>
+                <Link href="/course" className="button mr-4">Manage Courses</Link>
+                <Link href="/user" className="button mr-4">Manage Users</Link>
+              </>
+            )}
             <button onClick={handleLogout} className="button">
               Logout
             </button>

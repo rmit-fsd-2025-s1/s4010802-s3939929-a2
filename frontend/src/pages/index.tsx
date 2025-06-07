@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Navigation from "../components/Navigation"; // Import Navigation Component
+import Head from "next/head"; // Ensure Head is imported correctly
 
 export default function Home() {
   const router = useRouter();
@@ -11,7 +11,6 @@ export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  
   const slides = [
     {
       image: "https://images.unsplash.com/photo-1549923746-c502d488b3ea?w=600&auto=format&fit=crop&q=60",
@@ -56,71 +55,19 @@ export default function Home() {
         <meta name="description" content="Welcome to the home page" />
       </Head>
 
-      
-      <nav className="bg-transparent backdrop-blur-sm text-white p-4 fixed top-0 left-0 w-full z-10 border-b-2 border-gray-300">
-        <div className="container mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <Link href={`/?username=${username}&profession=${profession}`}>
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/25/25694.png"
-                alt="Home Logo"
-                className="w-8 h-8"
-              />
-            </Link>
-            <Link href={`/?username=${username}&profession=${profession}`} className="text-gray-800 text-3xl font-bold mb-2 drop-shadow-lg">
-              HOME
-            </Link>
+      <Navigation /> {/* Use Navigation component for consistent navbar */}
 
-            {isLoggedIn && (
-              <>
-                {/* <Link
-                  href={`/profile?username=${username}&profession=${profession}`}
-                  className="text-white hover:text-gray-300 transition-colors ml-4"
-                >
-                  View Profile
-                </Link> */}
-                <Link
-                  href={`/tutor?username=${username}&profession=${profession}`}
-                  className="text-white hover:text-gray-300 transition-colors ml-4"
-                >
-                  Apply as Tutor
-                </Link>
-              </>
-            )}
-          </div>
-
-          <div>
-            {isLoggedIn ? (
-              <button
-                onClick={handleLogout}
-                className="bg-red-500 px-4 py-2 rounded hover:bg-red-600"
-              >
-                Logout
-              </button>
-            ) : (
-              <Link
-                href="/login"
-                className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
-              >
-                Login
-              </Link>
-            )}
-          </div>
-        </div>
-      </nav>
-
-      
       <div className="container mx-auto px-4 py-12 text-center mt-20">
         {isLoggedIn ? (
           <>
-            <p className="text-gray-800 text-3xl font-bold mb-2 drop-shadow-lg">WELCOME {username}</p>
-            <p className="text-gray-700 mb-6 drop-shadow-md">
+            <p className="text-white text-4xl font-semibold mb-4 drop-shadow-lg">WELCOME {username}</p>
+            <p className="text-white text-xl mb-6 drop-shadow-md">
               Ready to take the next step in your teaching journey?
             </p>
 
             {profession === "Tutor" && (
               <Link href={`/tutor?username=${username}&profession=${profession}`}>
-                <button className="mt-6 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                <button className="mt-6 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-bold py-2 px-4 rounded-full hover:bg-gradient-to-r hover:from-teal-400 hover:to-teal-500 transition-colors">
                   Apply for Tutor Roles
                 </button>
               </Link>
@@ -128,7 +75,7 @@ export default function Home() {
 
             {profession === "Lecturer" && (
               <Link href={`/lecturer?username=${username}&profession=${profession}`}>
-                <button className="mt-6 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                <button className="mt-6 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold py-2 px-4 rounded-full hover:bg-gradient-to-r hover:from-blue-400 hover:to-blue-500 transition-colors">
                   Apply for Lecturer Roles
                 </button>
               </Link>
@@ -136,34 +83,34 @@ export default function Home() {
           </>
         ) : (
           <>
-            <p className="text-gray-800 text-3xl font-bold mb-2 drop-shadow-lg">WELCOME</p>
-            <p className="text-gray-700 mb-6 drop-shadow-md">
+            <p className="text-white text-4xl font-semibold mb-4 drop-shadow-lg">WELCOME</p>
+            <p className="text-white text-xl mb-6 drop-shadow-md">
               Helping tutors and lecturers connect and collaborate effectively.
             </p>
           </>
         )}
       </div>
-      
+
       <div className="relative max-w-4xl mx-auto mt-8">
         <img
           src={slides[currentIndex].image}
           alt="Slide"
-          className="rounded-lg w-full h-100 object-cover shadow"
+          className="rounded-lg w-full h-100 object-cover shadow-lg"
         />
-        <div className="absolute bottom-4 left-4 bg-black bg-opacity-60 text-white px-4 py-2 rounded">
+        <div className="absolute bottom-4 left-4 bg-black bg-opacity-60 text-white px-4 py-2 rounded-md">
           {slides[currentIndex].caption}
         </div>
         <button
           onClick={() =>
             setCurrentIndex((currentIndex - 1 + slides.length) % slides.length)
           }
-          className="absolute top-1/2 left-2 transform -translate-y-1/2 text-white bg-gray-700 bg-opacity-50 hover:bg-opacity-75 rounded-full px-2 py-1"
+          className="absolute top-1/2 left-2 transform -translate-y-1/2 text-white bg-gray-700 bg-opacity-50 hover:bg-opacity-75 rounded-full px-3 py-2"
         >
           ❮
         </button>
         <button
           onClick={() => setCurrentIndex((currentIndex + 1) % slides.length)}
-          className="absolute top-1/2 right-2 transform -translate-y-1/2 text-white bg-gray-700 bg-opacity-50 hover:bg-opacity-75 rounded-full px-2 py-1"
+          className="absolute top-1/2 right-2 transform -translate-y-1/2 text-white bg-gray-700 bg-opacity-50 hover:bg-opacity-75 rounded-full px-3 py-2"
         >
           ❯
         </button>
