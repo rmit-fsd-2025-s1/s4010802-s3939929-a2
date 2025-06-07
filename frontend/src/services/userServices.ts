@@ -1,10 +1,10 @@
 import { User } from "../types/user";
 
-const API_BASE_URL =  process.env.NEXT_PUBLIC_API_URL;
+const API_BASE_URL = "http://127.0.0.1:3004/api";
 
 export async function loginUser(username: string, password: string, profession: string): Promise<User | null> {
   try {
-    const response = await fetch("${API_BASE_URL}/users/login", {
+    const response = await fetch("http://localhost:3004/api/users/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
