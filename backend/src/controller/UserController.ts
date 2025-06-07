@@ -3,7 +3,6 @@ import { AppDataSource } from "../data-source";
 import { User } from "../entity/User";
 import bcrypt from "bcrypt";
 
-
 function isStrongPassword(password: string): boolean {
   const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   return regex.test(password);
@@ -108,11 +107,15 @@ export class UserController {
 
   async signup(req: Request, res: Response): Promise<Response> {
     try {
-      const { username, password, profession } = req.body;
+      const { username, password, confirmPassword, profession } = req.body;
 
       const existingUser = await this.userRepository.findOneBy({ username });
       if (existingUser) {
         return res.status(400).json({ message: "User already exists" });
+      }
+
+      if (password !== confirmPassword) {
+        return res.status(400).json({ message: "Passwords do not match" });
       }
 
       if (!isStrongPassword(password)) {

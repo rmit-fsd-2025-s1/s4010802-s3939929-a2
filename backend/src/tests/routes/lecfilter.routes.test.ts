@@ -6,32 +6,12 @@ import { Application } from "../../entity/Application";
 beforeAll(async () => {
   await AppDataSource.initialize(); //to prepare database for testing
   // Create lecturer user
-  await request(app).post("/api/usrs/signup").send({
-    username: "lecturer@skills.com",
-    password: "Password123",
+  await request(app).post("/api/usrs/login").send({
+    username: "tutorr@app.com",
+    password: "Password@123",
+    confirmPassword: "Password@123",
     profession: "Lecturer",
 });
-  // Create course and assign lecturer
-const courseRepo = AppDataSource.getRepository(Course);
-const course = courseRepo.create({
-    courseName: "Frontend Engineering",
-    code: "FE101",
-    description: "React and UI design",
-    assignedLecturer: "lecturer@skills.com",
-});
-await courseRepo.save(course);
-// Create application with React skills
-const appRepo = AppDataSource.getRepository(Application);
-const application = appRepo.create({
-    name: "Jane Developer",
-    role: "Tutor",
-    availability: "full-time",
-    skills: "React, Redux, JavaScript",
-    academicCredentials: "BTech",
-    dateApplied: new Date(),
-    course: course,
-});
-await appRepo.save(application);
 });
 afterAll(async () => {
   await AppDataSource.destroy(); //close the database after all tests

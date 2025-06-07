@@ -6,39 +6,19 @@ import { Application } from "../../entity/Application";
 beforeAll(async () => {
   await AppDataSource.initialize(); //prepare database for testing
   // Create a lecturer user
-  await request(app).post("/api/usrs/signup").send({
-    username: "tutor@app.com",
-    password: "Password123",
+  await request(app).post("/api/users/login").send({
+    username: "tutorr@app",
+    password: "Password@123",
+    confirmPassword: "Password@123",
     profession: "Lecturer",
 });
-  // Create a course
-  const courseRepo = AppDataSource.getRepository(Course);
-  const testCourse = courseRepo.create({
-    courseName: "Web Development",
-    code: "WD101",
-    description: "Learn HTML, CSS, JS",
-    assignedLecturer: "tutor@app.com",
-  });
-  await courseRepo.save(testCourse);
-  // Add an application with part-time availability
-  const appRepo = AppDataSource.getRepository(Application);
-  const application = appRepo.create({
-    name: "John Doe",
-    role: "Tutor",
-    availability: "part-time",
-    skills: "HTML, CSS, JS",
-    academicCredentials: "BSc in CS",
-    dateApplied: new Date(),
-    course: testCourse,
-  });
-  await appRepo.save(application);
 });
 afterAll(async () => {
   await AppDataSource.destroy(); //close the database after all tests
 });
 describe("GET /api/applications?lecturerUsername=... should return only part-time applications", () => { // display the applications to the assigned lecturer only
   it("should return applications filtered by part-time availability", async () => {
-    const res = await request(app).get("/api/applications?lecturerUsername=tutor@app.com"); // filtering the course based on part-time availability
+    const res = await request(app).get("/api/applications?lecturerUsername=tutorr@app.com"); // filtering the course based on part-time availability
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body.length).toBeGreaterThan(0);
