@@ -19,7 +19,7 @@ export default function Home() {
           {isAdmin ? (
             <>
               <li>
-                <Link href="/course" className="button">
+                <Link href="/admin/manageLecturers" className="button">
                   Manage Lecturers
                 </Link>
               </li>

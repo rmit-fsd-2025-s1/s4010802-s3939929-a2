@@ -43,7 +43,7 @@ return (
     <h1 className="text-2xl font-bold mb-6">Manage Lecturers</h1>
     {lecturers.map((lec) => (
         <div key={lec.id} className="mb-6 p-4 border rounded bg-white shadow">
-        <h2 className="text-lg font-semibold mb-3">👩‍🏫 {lec.username}</h2>
+        <h2 className="text-lg font-semibold mb-3">{lec.username}</h2>
         <div className="grid gap-2">
         {courses.map((course) => (
             <div
