@@ -1,12 +1,11 @@
 Hi there!
 This is the work for Nihar Mehta and Joshua Kumar.
-Did all the parts till DI but the HD is left wrote the unit tests but were not able to implement it to the fullest. 
-The login details for tutor and lecturer are stored in the local Storage of HTML. 
-For Tutor, 
-UserName - john@gmail.com     Password - tutor123    Profession - Tutor
-For Lecturer, 
-UserName - jack@gmail.com     Password - lecturer123   Profession - lecturer
-UserName - dan@gmail.com      Password - lecturer123   Profession - lecturer
+Implemented all the parts from PA to HD 
+Used the lectorial code for reference and Gen AI for several parts of the code namely - unit tests, password validation logic and hashed passwords, setting up env file, fixing admin dashboards logic(manage users and assign courses).
+
+our github repo URL - https://github.com/rmit-fsd-2025-s1/s4010802-s3939929-a1.git
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
 
 ## Getting Started
@@ -25,14 +24,22 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+You can start by creating a new account for yourself as a tutor and then proceed by submitting an application, further you can proceed with creating a new lecturer account through sign up and check for application submitted or there are already existing tutor and lecturer account. 
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+you can go through all the filters and check for the bar graph at the bottom of the page.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+since the passwords are hashed giving you basic login details (already created by us to test our project) : 
+username: try1@gmail.com
+password: Grapes@2025
+profession: Tutor
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+username:lec@gmail.com
+password: Apple@1234
+profession: lecturer
 
+Next for the admin-dashboard part you can perform 4 major functions (manage users, manage courses, manage lecturers or check for different selections through generating reports.)
+
+The login for admin-dashboard is username:admin, password:admin
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
