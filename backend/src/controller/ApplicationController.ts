@@ -64,6 +64,21 @@ export class ApplicationController {
         return response.status(400).json({ message: "All fields are required" });
       }
 
+      const existing = await this.applicationRepository.findOne({
+        where: {
+          name,
+          course: { id: courseId },
+          role,
+        },
+        relations: ["course"],
+      });
+
+      if (existing) {
+        return response.status(400).json({
+          message: "You have already applied for this role in this course.",
+        });
+      }
+
       const application = this.applicationRepository.create({
         course: { id: courseId },
         name,
