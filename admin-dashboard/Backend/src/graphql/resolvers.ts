@@ -64,5 +64,13 @@ export const resolvers = {
       user.blocked = false;
       return await userRepository.save(user);
     },
+
+
+    assignLecturer: async (_: any, { courseId, lecturerUsername }: any) => {
+    const course = await courseRepository.findOneBy({ id: courseId });
+    if (!course) throw new Error("Course not found");
+    course.assignedLecturer = lecturerUsername;
+    return await courseRepository.save(course);
+    }
   },
 };

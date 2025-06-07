@@ -12,6 +12,7 @@ export type User = {
   email: string;
   createdAt: string;
   updatedAt: string;
+  profession: "Lecturer" | "Tutor" | string;
 };
 
 export type Course = {
@@ -21,4 +22,5 @@ export type Course = {
   description: string;
   createdAt: string;
   updatedAt: string;
+  assignedLecturer?: string;
 };

@@ -19,4 +19,7 @@ export class Course {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column({ nullable: true })
+  assignedLecturer: string;
 }

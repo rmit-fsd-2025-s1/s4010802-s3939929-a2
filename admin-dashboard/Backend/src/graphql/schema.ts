@@ -8,6 +8,7 @@ export const typeDefs = gql`
     description: String!
     createdAt: String!
     updatedAt: String!
+    assignedLecturer: String
   }
 
   type User {
@@ -40,5 +41,6 @@ export const typeDefs = gql`
     deleteCourse(id: Int!): Boolean!
     blockUser(id: Int!): User!
     unblockUser(id: Int!): User!
+    assignLecturer(courseId: Int!, lecturerUsername: String!): Course!
   }
 `;

@@ -19,8 +19,8 @@ export default function Home() {
           {isAdmin ? (
             <>
               <li>
-                <Link href="/admin" className="button">
-                  Admin Dashboard
+                <Link href="/course" className="button">
+                  Manage Lecturers
                 </Link>
               </li>
               <li>

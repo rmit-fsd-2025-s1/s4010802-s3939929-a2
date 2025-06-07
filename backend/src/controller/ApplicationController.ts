@@ -8,16 +8,26 @@ export class ApplicationController {
   private userRepository = AppDataSource.getRepository(User);
 
   async all(request: Request, response: Response) {
-    try {
-      const applications = await this.applicationRepository.find({
-        relations: ["user", "course"],
-      });
-      return response.json(applications);
-    } catch (error) {
-      console.error(error);
-      return response.status(500).json({ message: "Error fetching applications" });
+  try {
+    const lecturerUsername = request.query.lecturerUsername as string;
+
+    const query = this.applicationRepository
+      .createQueryBuilder("application")
+      .leftJoinAndSelect("application.course", "course")
+      .leftJoinAndSelect("application.user", "user");
+
+    if (lecturerUsername) {
+      query.where("course.assignedLecturer = :lecturerUsername", { lecturerUsername });
     }
+
+    const applications = await query.getMany();
+    return response.json(applications);
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json({ message: "Error fetching applications" });
   }
+}
+
 
   async one(request: Request, response: Response) {
     try {

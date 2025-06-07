@@ -17,9 +17,16 @@ export default function LecturerPage() {
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const response = await fetch("http://localhost:3004/api/applications");
+        const lecturerUsername = router.query.username;
+        const response = await fetch(`http://localhost:3004/api/applications?lecturerUsername=${lecturerUsername}`);
+
         const data = await response.json();
-        setApplications(data);
+
+        const assignedApps = data.filter(
+          (app: any) => app.course?.assignedLecturer === lecturerUsername
+        );
+
+        setApplications(assignedApps);
 
         const selectionResponse = await fetch("http://localhost:3004/api/selections");
         const selectionData = await selectionResponse.json();
@@ -33,8 +40,10 @@ export default function LecturerPage() {
       }
     };
 
-    fetchApplications();
-  }, []);
+    if (router.query.username) {
+      fetchApplications();
+    }
+  }, [router.query.username]);
 
   const afterFilter = applications.filter((app) => {
     const matchesCourse = filteredCourse === "" || app.course?.courseCode === filteredCourse;
@@ -118,21 +127,17 @@ export default function LecturerPage() {
     router.push("/");
   };
 
-  const chartData = applications.map((app) => {
-    const count = selectedCandidates[app.id] ?? 0;
-    return {
-      name: app.name,
-      selected: count,
-    };
-  });
+  const chartData = applications.map((app) => ({
+    name: app.name,
+    selected: selectedCandidates[app.id] ?? 0,
+  }));
 
   const nonZero = chartData.filter((a) => a.selected > 0);
   const mostChosen = nonZero.reduce((a, b) => (a.selected >= b.selected ? a : b), nonZero[0]);
   const notMost = nonZero.filter((a) => a.selected !== mostChosen.selected);
-  const leastChosen =
-    notMost.length > 0
-      ? notMost.reduce((a, b) => (a.selected <= b.selected ? a : b), notMost[0])
-      : null;
+  const leastChosen = notMost.length > 0
+    ? notMost.reduce((a, b) => (a.selected <= b.selected ? a : b), notMost[0])
+    : null;
 
   return (
     <>
@@ -266,3 +271,4 @@ export default function LecturerPage() {
     </>
   );
 }
+

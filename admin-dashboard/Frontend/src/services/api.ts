@@ -184,3 +184,18 @@ export const unblockUser = async (id: number) => {
   });
   return data.unblockUser;
 };
+
+export const assignLecturer = async (courseId: number, lecturerUsername: string) => {
+  const { data } = await client.mutate({
+    mutation: gql`
+      mutation AssignLecturer($courseId: Int!, $lecturerUsername: String!) {
+        assignLecturer(courseId: $courseId, lecturerUsername: $lecturerUsername) {
+          id
+          assignedLecturer
+        }
+      }
+    `,
+    variables: { courseId, lecturerUsername },
+  });
+  return data.assignLecturer;
+};
