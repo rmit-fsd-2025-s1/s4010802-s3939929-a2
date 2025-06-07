@@ -16,13 +16,13 @@ afterAll(async () => {
 describe("User Signup", () => {
   it("should create a new user", async () => {
     const response = await request(app).post("/api/users/signup").send({
-      username: "user2@gmail.com",
+      username: "user3@gmail.com",
       password: "Tutor1234",
       profession: "Tutor",
     });
 
     expect(response.status).toBe(201);
     expect(response.body.user).toHaveProperty("id");
-    expect(response.body.user.username).toBe("user2@gmail.com");
+    expect(response.body.user.username).toBe("user3@gmail.com");
   });
 });
