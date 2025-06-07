@@ -34,14 +34,14 @@ export async function loginUser(username: string, password: string, profession: 
 
 
 
-export async function registerUser(username: string, password: string, profession: string): Promise<User | null> {
+export async function registerUser(username: string, password: string,confirmPassword: string, profession: string): Promise<User | null> {
   try {
     const response = await fetch(`${API_BASE_URL}/users/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password, profession }),
+      body: JSON.stringify({ username, password, confirmPassword, profession }),
     });
 
     if (!response.ok) {

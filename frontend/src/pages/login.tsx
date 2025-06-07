@@ -8,6 +8,7 @@ export default function AuthPage() {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
+    confirmPassword: "",
     profession: "",
   });
   const [isLogin, setIsLogin] = useState(true);
@@ -38,10 +39,15 @@ export default function AuthPage() {
       alert("Unexpected error during login.");
     }
   } else {
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
     try {
       const user = await registerUser(
         formData.username,
         formData.password,
+        formData.confirmPassword,
         formData.profession
       );
 
@@ -97,6 +103,21 @@ export default function AuthPage() {
                 required
               />
             </div>
+
+
+            <div className="mb-4">
+              <label className="block text-white text-sm font-bold mb-2">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                value={formData.confirmPassword}
+                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-black focus:outline-none focus:border-blue-500"
+                required
+              />
+            </div>
+            
 
             <div className="mb-4">
               <label className="block text-white text-sm font-bold mb-2">
