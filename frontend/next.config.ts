@@ -4,7 +4,20 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: true,
   images: {
-    domains: ['cdn-icons-png.flaticon.com', 'images.unsplash.com', 'plus.unsplash.com', 'media.istockphoto.com',],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.unsplash.com', 
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn-icons-png.flaticon.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'media.istockphoto.com',
+      },
+    ],
   },
 };
 

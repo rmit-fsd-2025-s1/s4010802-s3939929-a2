@@ -15,8 +15,6 @@ export function validateDto(dtoClass: any) {
         })),
       });
     }
-
-    // replace body with validated and transformed instance
     req.body = instance;
     next();
   };

@@ -3,7 +3,7 @@ This is the work for Nihar Mehta and Joshua Kumar.
 Implemented all the parts from PA to HD 
 Used the lectorial code for reference and Gen AI for several parts of the code namely - unit tests, password validation logic and hashed passwords, setting up env file, fixing admin dashboards logic(manage users and assign courses), HD part (h).
 
-our github repo URL - https://github.com/rmit-fsd-2025-s1/s4010802-s3939929-a1.git
+our github repo URL - https://github.com/rmit-fsd-2025-s1/s4010802-s3939929-a2.git
 
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).

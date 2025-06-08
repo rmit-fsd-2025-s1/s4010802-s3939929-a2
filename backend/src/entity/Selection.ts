@@ -5,38 +5,37 @@ import {
     ManyToOne,
     CreateDateColumn,
     UpdateDateColumn,
-  } from "typeorm";
-  import { Application } from "./Application";
+} from "typeorm";
+import { Application } from "./Application";
   
   
-  @Entity()
-  export class Selection {
-    @PrimaryGeneratedColumn()
-    id: number;
+@Entity()
+export class Selection {
+  @PrimaryGeneratedColumn()
+  id: number;
   
-    @Column()
-    rank: number;
+  @Column()
+  rank: number;
   
-    @Column()
-    comment: string;
+  @Column()
+  comment: string;
   
-    @ManyToOne(() => Application, (application) => application.selections, {
-      eager: true,
-      cascade: true,
-    })
-    application: Application;
+  @ManyToOne(() => Application, (application) => application.selections, {
+    eager: true,
+    cascade: true,
+  })
+  application: Application;  
+  @CreateDateColumn()
+  createdAt: Date;
   
-    @CreateDateColumn()
-    createdAt: Date;
-  
-    @UpdateDateColumn()
-    updatedAt: Date;
+  @UpdateDateColumn()
+  updatedAt: Date;
 
-    @Column()
-    tutorName: string;
+  @Column()
+  tutorName: string;
 
-    @Column()
-    lecturerUsername: String;
+  @Column()
+  lecturerUsername: String;
 
-  }
+}
   

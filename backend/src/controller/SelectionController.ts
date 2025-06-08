@@ -50,24 +50,24 @@ export class SelectionController {
         application: { id: applicationId },
       },
       relations: ["application"],
-    });
+  });
 
-    if (!selection) {
-      return response.status(404).json({ message: "Selection not found for this application" });
-    }
+  if (!selection) {
+    return response.status(404).json({ message: "Selection not found for this application" });
+  }
 
-    if (rank !== undefined) {
-      selection.rank = rank;
-    }
+  if (rank !== undefined) {
+    selection.rank = rank;
+  }
 
-    if (comment !== undefined) {
-      selection.comment = comment;
-    }
+  if (comment !== undefined) {
+    selection.comment = comment;
+  }
 
-    try {
-      const updatedSelection = await this.selectionRepository.save(selection);
-      return response.json(updatedSelection);
-    } catch (error) {
+  try {
+    const updatedSelection = await this.selectionRepository.save(selection);
+    return response.json(updatedSelection);
+  } catch (error) {
       console.error("Error updating selection:", error);
       return response.status(400).json({ message: "Error updating selection", error });
     }
