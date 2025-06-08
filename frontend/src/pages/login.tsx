@@ -27,7 +27,7 @@ export default function AuthPage() {
 
         if (!user) {
           alert("Login failed. You might be blocked or provided invalid credentials.");
-          router.push("/"); 
+          router.push("/");
           return;
         }
 
@@ -104,7 +104,7 @@ export default function AuthPage() {
               />
             </div>
 
-            {isLogin ? null : (
+            {!isLogin && (
               <div className="mb-4">
                 <label className="block text-white text-sm font-bold mb-2">
                   Confirm Password
@@ -137,9 +137,7 @@ export default function AuthPage() {
 
             <button
               type="submit"
-              className={`${
-                isLogin ? "bg-blue-500 hover:bg-blue-700" : "bg-green-500 hover:bg-green-700"
-              } text-white font-bold py-2 px-4 rounded-full w-full`}
+              className={`${isLogin ? "bg-blue-500 hover:bg-blue-700" : "bg-green-500 hover:bg-green-700"} text-white font-bold py-2 px-4 rounded-full w-full`}
             >
               {isLogin ? "Login" : "Sign Up"}
             </button>
@@ -148,9 +146,9 @@ export default function AuthPage() {
           <div className="mt-4 text-center">
             {isLogin ? (
               <>
-                <p className="text-white">Don't have an account?</p>
+                <p className="text-white">Don&apos;t have an account?</p>
                 <button
-                  className="text-blue-500 hover:text-blue-700 font-bold"
+                  className="text-blue-400 hover:text-blue-600 font-bold"
                   onClick={() => setIsLogin(false)}
                 >
                   Sign Up
@@ -160,7 +158,7 @@ export default function AuthPage() {
               <>
                 <p className="text-white">Already have an account?</p>
                 <button
-                  className="text-blue-500 hover:text-blue-700 font-bold"
+                  className="text-green-400 hover:text-green-600 font-bold"
                   onClick={() => setIsLogin(true)}
                 >
                   Login

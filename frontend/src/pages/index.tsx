@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Navigation from "../components/Navigation"; 
 import Head from "next/head"; 
+import Image from "next/image";
+
 
 export default function Home() {
   const router = useRouter();
@@ -39,14 +41,9 @@ export default function Home() {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [router.query]);
+  }, [router.query, slides.length]);
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    setUsername("");
-    setProfession("");
-    router.push("/login");
-  };
+  
 
   return (
     <>
@@ -92,10 +89,12 @@ export default function Home() {
       </div>
 
       <div className="relative max-w-4xl mx-auto mt-8">
-        <img
+        <Image
           src={slides[currentIndex].image}
           alt="Slide"
           className="rounded-lg w-full h-100 object-cover shadow-lg"
+          width={40}
+          height={40}
         />
         <div className="absolute bottom-4 left-4 bg-black bg-opacity-60 text-white px-4 py-2 rounded-md">
           {slides[currentIndex].caption}

@@ -1,27 +1,58 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
-import Navigation from "../components/Navigation"; 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  Cell
+} from "recharts";
+import Navigation from "../components/Navigation";
+
+interface Course {
+  id: number;
+  code: string;
+  courseName: string;
+  assignedLecturer?: string;
+}
+
+interface Application {
+  id: number;
+  name: string;
+  availability: string;
+  skills: string;
+  academicCredentials: string;
+  role: string;
+  course: Course;
+}
+
+interface Selection {
+  application: {
+    id: number;
+  };
+  rank: number;
+}
 
 export default function LecturerPage() {
-  const [applications, setApplications] = useState<any[]>([]);
+  const [applications, setApplications] = useState<Application[]>([]);
   const [filteredCourse, setFilteredCourse] = useState<string>("");
-  const [selectedCandidates, setSelectedCandidates] = useState<{ [key: string]: number }>({});
-  const [rankings, setRankings] = useState<{ [key: string]: number }>({});
-  const [comments, setComments] = useState<{ [key: string]: string }>({});
+  const [selectedCandidates, setSelectedCandidates] = useState<{ [key: number]: number }>({});
+  const [rankings, setRankings] = useState<{ [key: number]: number }>({});
+  const [comments, setComments] = useState<{ [key: number]: string }>({});
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("");
   const router = useRouter();
   const [filteredSessionType, setFilteredSessionType] = useState<string>("");
-  const [courses, setCourses] = useState<any[]>([]);
-
+  const [courses, setCourses] = useState<Course[]>([]);
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const res = await fetch("http://localhost:3004/api/courses");
-        const data = await res.json();
+        const data: Course[] = await res.json();
         setCourses(data);
       } catch (error) {
         console.error("Failed to fetch courses:", error);
@@ -30,23 +61,22 @@ export default function LecturerPage() {
     fetchCourses();
   }, []);
 
-
   useEffect(() => {
     const fetchApplications = async () => {
       try {
         const lecturerUsername = router.query.username;
-        const response = await fetch(`http://localhost:3004/api/applications?lecturerUsername=${lecturerUsername}`);
-
-        const data = await response.json();
-        const assignedApps = data.filter(
-          (app: any) => app.course?.assignedLecturer === lecturerUsername
+        const response = await fetch(
+          `http://localhost:3004/api/applications?lecturerUsername=${lecturerUsername}`
         );
-
+        const data: Application[] = await response.json();
+        const assignedApps = data.filter(
+          (app) => app.course?.assignedLecturer === lecturerUsername
+        );
         setApplications(assignedApps);
 
         const selectionResponse = await fetch("http://localhost:3004/api/selections");
-        const selectionData = await selectionResponse.json();
-        const selectedCandidatesData = selectionData.reduce((acc: any, selection: any) => {
+        const selectionData: Selection[] = await selectionResponse.json();
+        const selectedCandidatesData = selectionData.reduce((acc: { [key: number]: number }, selection) => {
           acc[selection.application.id] = selection.rank;
           return acc;
         }, {});
@@ -80,7 +110,7 @@ export default function LecturerPage() {
     return 0;
   });
 
-  const selectCandidate = async (id: string) => {
+  const selectCandidate = async (id: number) => {
     const newCount = (selectedCandidates[id] || 0) + 1;
     const updated = { ...selectedCandidates, [id]: newCount };
     setSelectedCandidates(updated);
@@ -104,7 +134,7 @@ export default function LecturerPage() {
     }
   };
 
-  const submitRankingAndComment = async (id: string) => {
+  const submitRankingAndComment = async (id: number) => {
     const rank = rankings[id] || 0;
     const comment = comments[id] || "";
 
@@ -130,16 +160,12 @@ export default function LecturerPage() {
     }
   };
 
-  const updateRanking = (id: string, rank: number) => {
+  const updateRanking = (id: number, rank: number) => {
     setRankings((prev) => ({ ...prev, [id]: rank }));
   };
 
-  const updateComment = (id: string, comment: string) => {
+  const updateComment = (id: number, comment: string) => {
     setComments((prev) => ({ ...prev, [id]: comment }));
-  };
-
-  const handleLogout = () => {
-    router.push("/");
   };
 
   const chartData = applications.map((app) => ({
@@ -147,12 +173,7 @@ export default function LecturerPage() {
     selected: selectedCandidates[app.id] ?? 0,
   }));
 
-  const nonZero = chartData.filter((a) => a.selected > 0);
-  const mostChosen = nonZero.reduce((a, b) => (a.selected >= b.selected ? a : b), nonZero[0]);
-  const notMost = nonZero.filter((a) => a.selected !== mostChosen.selected);
-  const leastChosen = notMost.length > 0
-    ? notMost.reduce((a, b) => (a.selected <= b.selected ? a : b), notMost[0])
-    : null;
+  
 
   return (
     <>
@@ -165,11 +186,12 @@ export default function LecturerPage() {
 
       <div className="relative min-h-screen flex items-center justify-center bg-gray-900 bg-opacity-50 py-10 px-4">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("/fractalBackground.png")' }} />
-        <div className="relative bg-gradient-to-r from-blue-800 to-purple-800 bg-opacity-80 backdrop-blur-md p-8 rounded-[20px] shadow-lg w-[750px] z-10 mt-20"> {/* Slightly smaller width and moved lower */}
+        <div className="relative bg-gradient-to-r from-blue-800 to-purple-800 bg-opacity-80 backdrop-blur-md p-8 rounded-[20px] shadow-lg w-[750px] z-10 mt-20">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold text-center text-white">Tutor Applications</h1>
           </div>
 
+          {/* Filter and Sort UI */}
           <div className="mb-4">
             <label className="block text-white text-sm font-medium mb-1">Filter by Course:</label>
             <select
@@ -179,14 +201,13 @@ export default function LecturerPage() {
             >
               <option value="">All Courses</option>
               {courses.map((course) => (
-                <option key={course.id} value={course.code}> 
+                <option key={course.id} value={course.code}>
                   {course.code} - {course.courseName}
                 </option>
               ))}
-              
             </select>
           </div>
-           
+
           <div className="mb-4">
             <label className="block text-white text-sm font-medium mb-1">Search (Name, Availability, Skills):</label>
             <input
@@ -224,6 +245,7 @@ export default function LecturerPage() {
             </select>
           </div>
 
+          {/* Applications */}
           {filteredApps.length === 0 ? (
             <p className="text-center text-gray-600">No applications found.</p>
           ) : (
@@ -280,6 +302,7 @@ export default function LecturerPage() {
             </div>
           )}
 
+          {/* Chart */}
           <div className="mt-10 bg-white shadow-md rounded-lg p-6">
             <h2 className="text-xl font-semibold mb-4">Visual Summary of Selections</h2>
             <ResponsiveContainer width="100%" height={300}>
@@ -289,8 +312,8 @@ export default function LecturerPage() {
                 <Tooltip />
                 <Bar dataKey="selected" minPointSize={30}>
                   {chartData.map((entry, index) => {
-                    let color = "#3182ce"; //default blue
-                    return <Cell key={`cell-${index}`} fill={color} />;
+                    const fillColor = "#3182ce";
+                    return <Cell key={`cell-${index}`} fill={fillColor} />;
                   })}
                 </Bar>
               </BarChart>

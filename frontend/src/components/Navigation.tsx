@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Navigation() {
   const router = useRouter();
@@ -36,9 +37,11 @@ export default function Navigation() {
             href={`/?username=${username}&profession=${profession}`}
             className="bg-gradient-to-r from-blue-800 to-purple-800 text-white font-bold py-2 px-4 rounded-full flex items-center gap-2 hover:bg-gradient-to-r hover:from-blue-700 hover:to-purple-700 transition-colors"
           >
-            <img
+            <Image
               src="https://cdn-icons-png.flaticon.com/512/1946/1946488.png"
               alt="Site Logo"
+              width={40}
+              height={40}
               className="w-6 h-6"
             />
             HOME

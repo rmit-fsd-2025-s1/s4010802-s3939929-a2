@@ -1,7 +1,7 @@
 export type Application = {
   courseId: number;
-  name: String;
-  role: String;
+  name: string;
+  role: string;
   availability: string;
   skills: string;
   academicCredentials: string;
