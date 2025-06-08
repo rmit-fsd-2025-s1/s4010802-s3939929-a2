@@ -7,9 +7,8 @@ beforeAll(async () => {
   await AppDataSource.initialize(); //to prepare database for testing
   // Create lecturer user
   await request(app).post("/api/usrs/login").send({
-    username: "tutorr@app.com",
-    password: "Password@123",
-    confirmPassword: "Password@123",
+    username: "lec@gmail.com.com",
+    password: "Apple@1234",
     profession: "Lecturer",
 });
 });
@@ -18,7 +17,7 @@ afterAll(async () => {
 });
 describe("GET /api/applications?lecturerUsername=... should return applications filtered by skills", () => { //filtering all applications which have the skills as "React"
   it("should return applications where skills contain 'React'", async () => {
-    const res = await request(app).get("/api/applications?lecturerUsername=lecturer@skills.com");
+    const res = await request(app).get("/api/applications?lecturerUsername=lec@gmail.com");
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body.length).toBeGreaterThan(0);

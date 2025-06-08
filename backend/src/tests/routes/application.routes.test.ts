@@ -8,7 +8,7 @@ beforeAll(async () => {
   await AppDataSource.initialize();//prepare database for testing
   // Signup new tutor user
   await request(app).post("/api/users/signup").send({
-    username: "try3@gmail.com",
+    username: "try5@gmail.com",
     password: "Grapes@2025",
     confirmPassword: "Grapes@2025",
     profession: "Tutor",
@@ -34,7 +34,7 @@ afterAll(async () => {
 describe("Tutor Application Submission", () => {
   it("should successfully submit a tutor application", async () => { //submitting an application
     const userRepo = AppDataSource.getRepository(User);
-    const user = await userRepo.findOneBy({ username: "try3@gmail.com" });
+    const user = await userRepo.findOneBy({ username: "try5@gmail.com" });
     const response = await request(app).post("/api/applications").send({
       userId: user?.id,
       name: "Ronnyy",
