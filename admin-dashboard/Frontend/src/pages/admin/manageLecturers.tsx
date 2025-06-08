@@ -54,7 +54,7 @@ return (
             <strong>{course.code}</strong> - {course.courseName}
             </div>
             <button
-            className="bg-blue-600 text-white px-3 py-1 rounded"
+            className="button6"
             onClick={() => handleAssign(course.id, lec.username)}
             >
             Assign

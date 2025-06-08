@@ -13,7 +13,7 @@ export default function Home() {
     <>
       
       <div className="container">
-        <h1>Welcome to the TT Webpage</h1>
+        <h1>Welcome to the Admin Dashboard</h1>
         
         <ul>
           {isAdmin ? (

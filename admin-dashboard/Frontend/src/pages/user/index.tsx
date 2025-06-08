@@ -66,7 +66,7 @@ export default function UserDashboard() {
               </div>
               <button
                 onClick={() => handleBlockToggle(user)}
-                className={`px-3 py-1 rounded text-white ${
+                className={`button5 ${
                   user.blocked ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"
                 }`}
               >

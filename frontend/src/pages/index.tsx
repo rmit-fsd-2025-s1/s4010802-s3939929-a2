@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import Navigation from "../components/Navigation"; // Import Navigation Component
-import Head from "next/head"; // Ensure Head is imported correctly
+import Navigation from "../components/Navigation"; 
+import Head from "next/head"; 
 
 export default function Home() {
   const router = useRouter();

@@ -20,8 +20,7 @@ const Navigation = () => {
   }, []);
 
   const handleLogout = () => {
-    sessionStorage.removeItem("username");
-    sessionStorage.removeItem("isAdmin");
+    sessionStorage.clear();
     setUsername("");
     setIsLoggedIn(false);
     setIsAdmin(false);
@@ -30,28 +29,21 @@ const Navigation = () => {
 
   return (
     <nav className="bg-gradient-to-r from-teal-500 to-teal-600 text-white p-4 flex justify-between items-center">
-      <Link href="/" className="text-2xl font-bold">
-        TT Webpage
+      <Link href="/" className="text-2xl font-bold flex items-center space-x-2">
+      <span>Home</span>
       </Link>
 
-      <div>
+      <div className="flex items-center gap-4">
         {isLoggedIn ? (
           <>
-            <span className="mr-4">Welcome, {username}</span>
-            {isAdmin && (
-              <>
-                <Link href="/admin/manageLecturers" className="button mr-4">Manage Lecturers</Link>
-                <Link href="/course" className="button mr-4">Manage Courses</Link>
-                <Link href="/user" className="button mr-4">Manage Users</Link>
-              </>
-            )}
-            <button onClick={handleLogout} className="button">
-              Logout
-            </button>
+            
           </>
         ) : (
-          <Link href="/login" className="button">
-            Login
+          <Link
+            href="/login"
+            className="button4"
+          >
+            Logout
           </Link>
         )}
       </div>

@@ -25,11 +25,67 @@ li {
 
 .button {
   background-color: #007bff;
-  color: #fff;
+  color: #150101;
   padding: 10px 20px;
   text-decoration: none;
   border-radius: 5px;
   margin: 10px;
+  display: inline-block;
+}
+
+.button1 {
+  background-color: #088d1c;
+  color: #150101;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 50px;
+  margin: 20px;
+  display: inline-block;
+}
+.button3 {
+  background-color: #06aff7;
+  color: #150101;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 1px;
+  margin: 20px;
+  display: inline-block;
+}
+
+.button2 {
+  background-color: #f22020;
+  color: #150101;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 50px;
+  margin: 20px;
+  display: inline-block;
+}
+.button4 {
+  background-color: #06aff7;
+  color: #150101;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 1px;
+  margin: 20px;
+  display: inline-block;
+}
+.button5 {
+  background-color: #06c53c;
+  color: #150101;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 1px;
+  margin: 20px;
+  display: inline-block;
+}
+.button6 {
+  background-color: #06c53c;
+  color: #150101;
+  padding: 3px 3px;
+  text-decoration: none;
+  border-radius: 1px;
+  margin: 5px;
   display: inline-block;
 }
 
@@ -57,11 +113,11 @@ nav a:hover {
   color: #ccc;
 }
 
-/* Add this to your existing globals.css */
+
 .login-container {
   max-width: 400px;
   margin: 50px auto;
-  background-color: #ffffff;
+  background-color: #ec0707;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -82,7 +138,7 @@ nav a:hover {
 
 .login-container button {
   background-color: #007bff;
-  color: #fff;
+  color: #0a0000;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -98,10 +154,10 @@ nav a:hover {
   margin-bottom: 15px;
 }
 
-/* Add this to your globals.css */
+
 .button {
-  background-color: #007bff;
-  color: #fff;
+  background-color: #06aff7;
+  color: #0c0101;
   padding: 10px 20px;
   border-radius: 5px;
   margin-right: 10px;
