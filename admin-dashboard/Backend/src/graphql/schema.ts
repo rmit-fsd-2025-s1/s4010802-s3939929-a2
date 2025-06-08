@@ -27,10 +27,37 @@ export const typeDefs = gql`
     updatedAt: String!
   }
 
+  type Selection{
+    id: ID!
+    rank: Int!
+    comment: String!
+    createdAt: String!
+    updatedAt: String!
+    tutorName: String!    
+    lecturerUsername: String!
+    application: Application!
+}
+
+type Application {
+    id: ID!
+    name: String!
+    availability: String!
+    skills: String!
+    academicCredentials: String!
+    role: String!
+    course: Course
+    user: User
+    createdAt: String!
+    updatedAt: String!
+  }
+
   type Query {
     courses: [Course!]!
     users: [User!]!
     admins: [Admin!]!
+    candidatesPerCourse: [[String!]!]!
+    tutorsChosenForMoreThan3Courses: [String!]!
+    unselectedTutors: [String!]!
   }
 
   type Mutation {

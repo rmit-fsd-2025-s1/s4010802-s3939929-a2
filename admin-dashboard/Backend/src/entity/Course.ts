@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Application } from "./Application";
 
 @Entity()
 export class Course {
@@ -13,6 +14,9 @@ export class Course {
 
   @Column()
   description: string;
+
+  @OneToMany(() => Application, (application) => application.course)
+  applications: Application[];
 
   @CreateDateColumn()
   createdAt: Date;

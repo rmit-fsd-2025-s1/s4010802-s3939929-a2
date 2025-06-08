@@ -186,7 +186,7 @@ export default function LecturerPage() {
               
             </select>
           </div>
-          
+           
           <div className="mb-4">
             <label className="block text-white text-sm font-medium mb-1">Search (Name, Availability, Skills):</label>
             <input

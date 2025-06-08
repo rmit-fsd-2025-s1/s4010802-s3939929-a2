@@ -33,6 +33,11 @@ export default function Home() {
                   Manage Users
                 </Link>
               </li>
+              <li>
+                <Link href="/admin-report" className="button">
+                  Study Selection
+                </Link>
+              </li>
             </>
           ) : (
             <p>Please log in as an admin to access more features.</p>

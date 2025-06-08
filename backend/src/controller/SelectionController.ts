@@ -25,7 +25,7 @@ export class SelectionController {
   }
 
   async save(request: Request, response: Response) {
-    const { applicationId, rank, comment, tutorName, lecturerUsername } = request.body;
+    const { applicationId, rank, comment, tutorName, lecturerUsername} = request.body;
     const selection = this.selectionRepository.create({
       application: { id: applicationId },
       rank,
@@ -43,10 +43,8 @@ export class SelectionController {
   }
 
   async update(request: Request, response: Response) {
-    const applicationId = parseInt(request.params.id); // This is applicationId from frontend
+    const applicationId = parseInt(request.params.id);
     const { rank, comment } = request.body;
-
-    // Find selection using application.id
     const selection = await this.selectionRepository.findOne({
       where: {
         application: { id: applicationId },
