@@ -23,17 +23,22 @@ const Navigation = () => {
 
       <div className="flex items-center gap-4">
         {isLoggedIn ? (
-          <>
-            
-          </>
-        ) : (
-          <Link
-            href="/login"
-            className="button4"
-          >
-            Logout
-          </Link>
-        )}
+  <button
+    className="button4"
+    onClick={() => {
+      sessionStorage.clear();
+      setIsLoggedIn(false);
+      window.location.href = "/login";
+    }}
+  >
+    Logout
+  </button>
+) : (
+  <Link href="/login" className="button4">
+    Login
+  </Link>
+)}
+
       </div>
     </nav>
   );

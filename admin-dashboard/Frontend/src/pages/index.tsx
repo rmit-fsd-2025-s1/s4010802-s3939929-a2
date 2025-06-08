@@ -1,3 +1,4 @@
+import Navigation from "@/components/Navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -11,7 +12,7 @@ export default function Home() {
 
   return (
     <>
-      
+      <Navigation/>
       <div className="container">
         <h1>Welcome to the Admin Dashboard</h1>
         
@@ -44,6 +45,7 @@ export default function Home() {
           )}
         </ul>
       </div>
+      
     </>
   );
 }
