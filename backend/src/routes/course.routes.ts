@@ -4,7 +4,7 @@ import { CourseController } from "../controller/CourseController";
 const router = Router();
 const courseController = new CourseController();
 
-
+router.get("/", courseController.getAllCourses);
 router.get("/courses", async (req, res) => {
   try {
     await courseController.all(req, res);

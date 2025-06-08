@@ -120,4 +120,14 @@ export class CourseController {
       res.status(500).json({ message: "Error deleting all courses" });
     }
   }
+
+  async getAllCourses(_: Request, res: Response): Promise<Response> {
+    try {
+      const courseRepo = AppDataSource.getRepository(Course);
+      const courses = await courseRepo.find();
+      return res.json(courses);
+    } catch (err) {
+      return res.status(500).json({ message: "Failed to fetch courses", error: err });
+    }
+  }
 }

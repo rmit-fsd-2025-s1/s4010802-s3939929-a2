@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
-import Navigation from "../components/Navigation"; // Assuming Navigation is in components
+import Navigation from "../components/Navigation"; 
 
 export default function LecturerPage() {
   const [applications, setApplications] = useState<any[]>([]);
@@ -14,6 +14,22 @@ export default function LecturerPage() {
   const [sortBy, setSortBy] = useState("");
   const router = useRouter();
   const [filteredSessionType, setFilteredSessionType] = useState<string>("");
+  const [courses, setCourses] = useState<any[]>([]);
+
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const res = await fetch("http://localhost:3004/api/courses");
+        const data = await res.json();
+        setCourses(data);
+      } catch (error) {
+        console.error("Failed to fetch courses:", error);
+      }
+    };
+    fetchCourses();
+  }, []);
+
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -46,7 +62,7 @@ export default function LecturerPage() {
   }, [router.query.username]);
 
   const afterFilter = applications.filter((app) => {
-    const matchesCourse = filteredCourse === "" || app.course?.courseCode === filteredCourse;
+    const matchesCourse = filteredCourse === "" || app.course?.code === filteredCourse;
     const search = searchTerm.toLowerCase();
     const matchesSession = filteredSessionType === "" || app.role === filteredSessionType;
     const matchesSearch =
@@ -162,12 +178,15 @@ export default function LecturerPage() {
               className="w-full p-2 border border-gray-300 rounded-full text-white bg-black focus:outline-none focus:border-blue-500 pl-3"
             >
               <option value="">All Courses</option>
-              <option value="COSC1234">COSC1234 - Full Stack Development</option>
-              <option value="COSC5678">COSC5678 - Data Structures</option>
-              <option value="COSC9876">COSC9876 - Machine Learning</option>
+              {courses.map((course) => (
+                <option key={course.id} value={course.code}> 
+                  {course.code} - {course.courseName}
+                </option>
+              ))}
+              
             </select>
           </div>
-
+          
           <div className="mb-4">
             <label className="block text-white text-sm font-medium mb-1">Search (Name, Availability, Skills):</label>
             <input
